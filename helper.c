@@ -3,14 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   helper.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aait-ihi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 14:44:38 by aait-ihi          #+#    #+#             */
-/*   Updated: 2019/12/11 03:10:44 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2019/12/12 16:37:12 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_readline.h"
+
+void rewrite_line(t_readline *readline)
+{	
+	cur_goto(readline, readline->origin_cursor);
+	ft_putstr(readline->line);
+	cur_goto(readline, readline->cursor);
+}
 
 void insert_in_line(t_readline *readline, char c)
 {
@@ -34,15 +41,20 @@ void insert_in_line(t_readline *readline, char c)
 	
 }
 
-void cur_goto(t_readline *readline, int cursor)
+void get_cursor_position(t_readline *readline)
 {
-	int co;
-	int li;
+	char *buff;
+	int col;
+	int row;
 
-	li = cursor / readline->row;
-	co = cursor % readline->row;
-	;
-	tputs(tgoto(tgetstr("cm", 0), co, li), 0, output);
+	buff = (char[20]){0};
+	ft_putstr_fd("\e[6n",0);
+	read(0, buff, 20);
+	row = ft_atoi(buff + 2);
+	buff = (char *)ft_skip_unitl_char(buff, ";");
+	col = ft_atoi(buff + 1);
+	readline->origin_cursor = (row - 1) * readline->col + col - 1;
+	readline->cursor = readline->origin_cursor;
 }
 
 int output(int c)
@@ -50,6 +62,7 @@ int output(int c)
 	ft_putchar(c);
 	return (0);
 }
+
 // void	configure_terminal(t_ft_select *ft_select)
 // {
 // 	if (tcgetattr(0, &ft_select->config) < 0)

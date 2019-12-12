@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aait-ihi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/07 00:57:15 by aait-ihi          #+#    #+#             */
-/*   Updated: 2019/12/11 03:20:49 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2019/12/12 16:36:16 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void init(t_readline *readline)
 		puts("error");
 	tgetent(NULL, getenv("TERM"));
 	signal_resize(0);
+	get_cursor_position(readline);
 }
 
 int main()
@@ -52,7 +53,7 @@ int main()
 			else
 			{
 				insert_in_line(&readline, button);
-				ft_putchar(button);
+				rewrite_line(&readline);
 			}
 		}
 	}

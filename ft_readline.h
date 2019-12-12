@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_readline.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aait-ihi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 12:55:33 by yabakhar          #+#    #+#             */
-/*   Updated: 2019/12/11 03:20:08 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2019/12/12 16:37:18 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ typedef struct s_readline
 	int col;
 	int row;
 	int cursor;
+	int origin_cursor;
 } t_readline;
 
 typedef struct s_item
@@ -96,6 +97,8 @@ void active_modes(t_readline *readline, int cursor);
 void delete_char(t_readline *readline, size_t num);
 void delete_last_line(t_readline *readline);
 void clean_win(t_readline *readline);
+void rewrite_line(t_readline *readline);
+void get_cursor_position(t_readline *readline);
 
 void		signal_resize(int sig);
 void sig_dispatch(int a);
