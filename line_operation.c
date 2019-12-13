@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   line_operation.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aait-ihi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/12 22:57:02 by aait-ihi          #+#    #+#             */
-/*   Updated: 2019/12/13 01:46:06 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2019/12/13 14:55:15 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,12 @@ void update_origin_cursor(t_readline *readline)
 
 void rewrite_line(t_readline *readline)
 {
-	update_origin_cursor(readline);
+	//update_origin_cursor(readline);
+	const int current_cursor = readline->cursor;
 	cur_goto(readline, readline->origin_cursor);
 	tputs(tgetstr("cd", NULL), 0, output);
 	ft_putstr(readline->line);
-	cur_goto(readline, readline->cursor);
+	cur_goto(readline, current_cursor);
 }
 
 void insert_in_line(t_readline *readline, char c)

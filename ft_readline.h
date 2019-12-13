@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_readline.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aait-ihi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 12:55:33 by yabakhar          #+#    #+#             */
-/*   Updated: 2019/12/13 00:33:47 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2019/12/13 14:53:24 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,9 @@
 #define BUTTON_UP 4283163
 #define BUTTON_DOWN 4348699
 #define BUTTON_RIGHT 4414235
+#define BUTTON_ALT_RIGHT 26139
 #define BUTTON_LEFT 4479771
+#define BUTTON_ALT_LEFT 25115
 #define BUTTON_SPACE 32
 #define BUTTON_ENTER 10
 #define BUTTON_DEL 127

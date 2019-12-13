@@ -6,7 +6,7 @@
 /*   By: aait-ihi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/07 06:44:03 by aait-ihi          #+#    #+#             */
-/*   Updated: 2019/12/12 16:23:33 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2019/12/13 14:20:30 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void cur_goto(t_readline *readline, int cursor)
 
 	li = cursor / readline->col;
 	co = cursor % readline->col;
+	readline->cursor = cursor;
 	tputs(tgoto(tgetstr("cm", 0), co, li), 0, output);
 }
 
