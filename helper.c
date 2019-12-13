@@ -3,43 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   helper.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 14:44:38 by aait-ihi          #+#    #+#             */
-/*   Updated: 2019/12/12 16:37:12 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2019/12/13 01:42:36 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_readline.h"
-
-void rewrite_line(t_readline *readline)
-{	
-	cur_goto(readline, readline->origin_cursor);
-	ft_putstr(readline->line);
-	cur_goto(readline, readline->cursor);
-}
-
-void insert_in_line(t_readline *readline, char c)
-{
-	char *new_line;
-	char *line;
-	char *tmp = (char []){c, 0};
-
-	readline->line[readline->cursor] = 0;
-	line = readline->line;
-	if (readline->line_len == readline->cursor)
-		new_line = ft_strjoin(readline->line, tmp);
-	else
-		new_line = ft_strnjoin((char *[]){line, tmp, &line[readline->cursor + 1]}, 3);
-	if (new_line)
-	{
-		free(line);
-		readline->line = new_line;
-		readline->line_len++;
-		readline->cursor++;
-	}
-	
-}
 
 void get_cursor_position(t_readline *readline)
 {
@@ -48,7 +19,7 @@ void get_cursor_position(t_readline *readline)
 	int row;
 
 	buff = (char[20]){0};
-	ft_putstr_fd("\e[6n",0);
+	ft_putstr_fd("\e[6n", 0);
 	read(0, buff, 20);
 	row = ft_atoi(buff + 2);
 	buff = (char *)ft_skip_unitl_char(buff, ";");

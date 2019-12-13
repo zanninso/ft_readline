@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_readline.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 12:55:33 by yabakhar          #+#    #+#             */
-/*   Updated: 2019/12/12 16:37:18 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2019/12/13 00:33:47 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,25 +70,20 @@ typedef struct s_ft_select
 
 t_readline *g_readline;
 
+void get_cursor_position(t_readline *readline);
 void cur_up(t_readline *readline);
 void cur_down(t_readline *readline);
 void cur_right(t_readline *readline);
 void cur_left(t_readline *readline);
-void cur_from_to(t_readline *readline, int from, int to);
-void reset(int ac, char **av, t_readline *readline);
-void select_item(t_readline *readline);
-void delete_item(t_readline *readline);
-void rediment(void);
-void end(t_readline *readline);
+void cursor_move(t_readline *readline, int old_cursor, int new_cursor);
+void cur_goto(t_readline *readline, int cursor);
 
 void set_signal(void);
 
-void insert_in_line(t_readline *readline, char c);
 int output(int str);
 void print_args(t_readline *readline);
 void set_items(int ac, char **av, t_readline *readline);
-void cursor_move(t_readline *readline, int old_cursor, int new_cursor);
-void cur_goto(t_readline *readline, int cursor);
+
 void configure_terminal(t_readline *readline);
 
 void deactive_modes();
@@ -97,8 +92,12 @@ void active_modes(t_readline *readline, int cursor);
 void delete_char(t_readline *readline, size_t num);
 void delete_last_line(t_readline *readline);
 void clean_win(t_readline *readline);
+
+void insert_in_line(t_readline *readline, char c);
+void remove_from_line(t_readline *readline);
 void rewrite_line(t_readline *readline);
-void get_cursor_position(t_readline *readline);
+
+
 
 void		signal_resize(int sig);
 void sig_dispatch(int a);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/07 00:57:15 by aait-ihi          #+#    #+#             */
-/*   Updated: 2019/12/12 16:36:16 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2019/12/13 00:56:29 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ int main()
 	t_readline readline;
 	int button;
 
+	ft_printf("➜  ft_readline git:(master) ");
 	init(&readline);
 	while (1)
 	{
@@ -50,11 +51,12 @@ int main()
 				cur_left(&readline);
 			else if (button == BUTTON_END)
 				cur_left(&readline);
+			else if (button == BUTTON_DEL || button == BUTTON_DEL2)
+				remove_from_line(&readline);
+			else if (button == BUTTON_ENTER)
+				exit(0);
 			else
-			{
 				insert_in_line(&readline, button);
-				rewrite_line(&readline);
-			}
 		}
 	}
 }
