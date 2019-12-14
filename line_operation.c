@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   line_operation.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/12 22:57:02 by aait-ihi          #+#    #+#             */
-/*   Updated: 2019/12/13 14:55:15 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2019/12/14 10:55:54 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,32 +28,30 @@ void rewrite_line(t_readline *readline)
 	cur_goto(readline, current_cursor);
 }
 
-void insert_in_line(t_readline *readline, char c)
+void insert_in_line(t_readline *readline, char *str)
 {
 	char *new_line;
 	char *line;
 	char *tmp;
+	int i;
 	const int cur_position = readline->cursor - readline->origin_cursor;
 
 	line = readline->line;
 	if (readline->line_len == cur_position)
-	{
-		tmp = (char[]){c, 0};
-		readline->line[cur_position] = 0;
-		new_line = ft_strjoin(readline->line, tmp);
-	}
+		new_line = ft_strjoin(readline->line, str);
 	else
 	{
-		tmp = (char[]){c, readline->line[cur_position], 0};
+		tmp = (char[]){readline->line[cur_position], 0};
 		readline->line[cur_position] = 0;
-		new_line = ft_strnjoin((char *[]){line, tmp, &line[cur_position + 1]}, 3);
+		new_line = ft_strnjoin((char *[]){line, str, tmp, &line[cur_position + 1]}, 4);
 	}
 	if (new_line)
 	{
 		free(line);
 		readline->line = new_line;
-		readline->line_len++;
-		readline->cursor++;
+		i = ft_strlen(str);
+		readline->line_len += i;
+		readline->cursor += i;
 	}
 	rewrite_line(readline);
 }

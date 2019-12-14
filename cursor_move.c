@@ -3,24 +3,36 @@
 /*                                                        :::      ::::::::   */
 /*   cursor_move.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/07 06:44:03 by aait-ihi          #+#    #+#             */
-/*   Updated: 2019/12/13 14:20:30 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2019/12/14 08:54:59 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_readline.h"
 
-void cur_goto(t_readline *readline, int cursor)
+void cur_move_by_word(t_readline *readline, int button)
 {
-	int co;
-	int li;
+	const int current_cur = readline->cursor - readline->origin_cursor;
+	int diff;
+	char *tmp;
 
-	li = cursor / readline->col;
-	co = cursor % readline->col;
-	readline->cursor = cursor;
-	tputs(tgoto(tgetstr("cm", 0), co, li), 0, output);
+	tmp = NULL;
+	if(button == BUTTON_ALT_RIGHT)
+	{
+		tmp = (char *)ft_skip_unitl_char(readline->line + current_cur, " '\"");
+		tmp = ft_skip_chars(tmp, " '\"");
+	}
+	else if(button == BUTTON_ALT_LEFT)
+	{
+		tmp = ft_rskip_chars(readline->line, " '\"", current_cur - 1);
+		tmp = ft_rskip_unitl_char(readline->line, " '\"", tmp - readline->line);
+		if(ft_isinstr(*tmp, " '\""))
+			tmp++;
+	}
+	diff = tmp - &readline->line[current_cur];
+	cur_goto(readline, readline->cursor + diff);
 }
 
 void cur_up(t_readline *readline)

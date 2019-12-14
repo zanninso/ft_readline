@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_readline.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 12:55:33 by yabakhar          #+#    #+#             */
-/*   Updated: 2019/12/13 14:53:24 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2019/12/14 10:42:32 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,11 @@
 #define BUTTON_HOME 4741915
 #define BUTTON_R 114
 
-int fd;
-
 typedef struct s_readline
 {
 	struct termios config;
 	char *line;
+	char *tmp_line;
 	int line_len;
 	int col;
 	int row;
@@ -77,6 +76,7 @@ void cur_up(t_readline *readline);
 void cur_down(t_readline *readline);
 void cur_right(t_readline *readline);
 void cur_left(t_readline *readline);
+void cur_move_by_word(t_readline *readline, int button);
 void cursor_move(t_readline *readline, int old_cursor, int new_cursor);
 void cur_goto(t_readline *readline, int cursor);
 
@@ -95,7 +95,7 @@ void delete_char(t_readline *readline, size_t num);
 void delete_last_line(t_readline *readline);
 void clean_win(t_readline *readline);
 
-void insert_in_line(t_readline *readline, char c);
+void insert_in_line(t_readline *readline, char *str);
 void remove_from_line(t_readline *readline);
 void rewrite_line(t_readline *readline);
 
