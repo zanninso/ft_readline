@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aait-ihi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/07 00:57:15 by aait-ihi          #+#    #+#             */
-/*   Updated: 2019/12/14 10:59:58 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2019/12/15 02:21:19 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,10 @@ void init(t_readline *readline)
 
 int main()
 {
-	t_readline readline;
-	char  buff[4001];
-	int r;
-	int button;
+	t_readline	readline;
+	char		buff[4001];
+	int			r;
+	int			button;
 
 	ft_printf("➜  ft_readline git:(master) ");
 	init(&readline);
@@ -45,9 +45,9 @@ int main()
 			if(r > 4)
 				insert_in_line(&readline, buff);
 			else if (button == BUTTON_UP)
-				cur_up(&readline);
+				history_next(&readline);
 			else if (button == BUTTON_DOWN)
-				cur_down(&readline);
+				history_previous(&readline);
 			else if (button == BUTTON_RIGHT)
 				cur_right(&readline);
 			else if (button == BUTTON_LEFT)
@@ -61,7 +61,7 @@ int main()
 			else if (button == BUTTON_DEL || button == BUTTON_DEL2)
 				remove_from_line(&readline);
 			else if (button == BUTTON_ENTER)
-				exit(0);
+				end_readline(&readline);
 			else 
 				insert_in_line(&readline, buff);
 		}

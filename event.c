@@ -3,72 +3,62 @@
 /*                                                        :::      ::::::::   */
 /*   event.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aait-ihi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 14:44:12 by aait-ihi          #+#    #+#             */
-/*   Updated: 2019/12/10 05:13:57 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2019/12/15 02:29:33 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_select.h"
+#include "ft_readline.h"
 
-void	select_item(t_ft_select *ft_select)
+void history_next(t_readline *readline)
 {
-	ft_select->items[ft_select->cursor].selected ^= 1;
-	active_modes(ft_select, ft_select->cursor);
-	cur_goto(ft_select, ft_select->cursor);
-	ft_putstr_fd(ft_select->items[ft_select->cursor].content, ft_select->fd);
-	deactive_modes();
-	cur_down(ft_select);
-}
-
-void	delete_item(t_ft_select *ft_select)
-{
-	const int	count = ft_select->count - 1;
-	const int	cursor = ft_select->cursor;
-	t_item		*items;
-
-	if (count == 0)
-		end(ft_select);
-	items = ft_select->items;
-	delete_last_line(ft_select);
-	delete_char(ft_select, ft_select->max_col);
-	ft_select->count--;
-	if (cursor < ft_select->count)
-		ft_memcpy(&items[cursor], &items[cursor + 1],
-											sizeof(t_item) * (count - cursor));
-	else
-		ft_select->cursor--;
-	print_args(ft_select);
-}
-
-void	end(t_ft_select *ft_select)
-{
-	int	i;
-
-	i = 0;
-	ft_select->config.c_lflag |= (ICANON | ECHO);
-	tcsetattr(0, 0, &ft_select->config);
-	tputs(tgetstr("te", 0), 0, output);
-	tputs(tgetstr("ve", 0), 0, output);
-	while (i < ft_select->count)
+	if (readline->current_cmd_history && readline->current_cmd_history->next)
 	{
-		if (ft_select->items[i].selected)
+		if (readline->current_cmd_history->line != readline->line)
 		{
-			ft_putstr_fd(ft_select->items[i].content, 1);
-			if (i < ft_select->count - 1)
-				ft_putstr_fd(" ", 1);
+			ft_strdel(&readline->tmp_line);
+			readline->tmp_line = readline->line;
+			readline->tmp_len = readline->line_len;
 		}
-		i++;
+		readline->current_cmd_history = readline->current_cmd_history->next;
+		readline->line = readline->current_cmd_history->line;
+		readline->line_len = readline->current_cmd_history->len;
+		rewrite_line(readline);
 	}
-	free(ft_select->items);
-	exit(0);
 }
 
-void	reset(int ac, char **av, t_ft_select *ft_select)
+void history_previous(t_readline *readline)
 {
-	ft_select->count = ac;
-	set_items(ac, av, ft_select);
-	signal_resize(0);
-	cursor_move(ft_select, ft_select->cursor, 0);
+	if (readline->current_cmd_history && readline->current_cmd_history->prev)
+	{
+		if (readline->current_cmd_history->line != readline->line)
+		{
+			ft_strdel(&readline->tmp_line);
+			readline->tmp_line = readline->line;
+			readline->tmp_len = readline->line_len;
+		}
+		readline->current_cmd_history = readline->current_cmd_history->prev;
+		readline->line = readline->current_cmd_history->line;
+		readline->line_len = readline->current_cmd_history->len;
+		rewrite_line(readline);
+	}
+	else if(readline->tmp_line)
+	{
+		if (readline->current_cmd_history)
+			if (readline->current_cmd_history->line != readline->line)
+				ft_strdel(&readline->line);
+		readline->line = readline->tmp_line;
+		readline->line_len = readline->tmp_len;
+		rewrite_line(readline);
+	}
+}
+
+void end_readline(t_readline *readline)
+{
+	if(readline->line_len)
+	add_to_history(readline->line);
+	ft_printf("➜  ft_readline git:(master) ");
+	init(readline);
 }
