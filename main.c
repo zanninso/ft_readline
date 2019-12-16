@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/07 00:57:15 by aait-ihi          #+#    #+#             */
-/*   Updated: 2019/12/15 02:21:19 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2019/12/15 17:00:14 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ void init(t_readline *readline)
 	tgetent(NULL, getenv("TERM"));
 	signal_resize(0);
 	get_cursor_position(readline);
+	readline->current_cmd_history = get_cmd_history_head();
 }
 
 int main()

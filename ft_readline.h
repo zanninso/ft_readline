@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_readline.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 12:55:33 by yabakhar          #+#    #+#             */
-/*   Updated: 2019/12/15 02:24:58 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2019/12/16 03:19:00 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,13 @@ typedef struct s_readline
 	t_cmd_history *current_cmd_history;
 	char *line;
 	char *tmp_line;
+	int history_index;
 	int line_len;
 	int tmp_len;
 	int col;
 	int row;
+	int win_col;
+	int win_row;
 	int cursor;
 	int origin_cursor;
 } t_readline;
@@ -93,7 +96,7 @@ void			rewrite_line(t_readline *readline);
 /*
 **	CMD History
 */
-void			add_to_history(char *str);
+void			add_to_history(char *str, int len);
 void			free_history(void);
 t_cmd_history	*get_cmd_history_head(void);
 
