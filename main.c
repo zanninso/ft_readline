@@ -6,7 +6,7 @@
 /*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/07 00:57:15 by aait-ihi          #+#    #+#             */
-/*   Updated: 2019/12/15 17:00:14 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2019/12/17 17:03:13 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void init(t_readline *readline)
 {
 	g_readline = readline;
 	ft_bzero(readline, sizeof(t_readline));
-	readline->line = ft_strdup("");
+	//readline->line = ft_strdup("");
 	if (tcgetattr(0, &readline->config) < 0)
 		puts("error");
 	readline->config.c_lflag &= ~(ECHO | ICANON);
@@ -25,7 +25,8 @@ void init(t_readline *readline)
 	tgetent(NULL, getenv("TERM"));
 	signal_resize(0);
 	get_cursor_position(readline);
-	readline->current_cmd_history = get_cmd_history_head();
+	add_to_history(ft_strdup(""), 0);
+	readline->cmd = get_cmd_history_head();
 }
 
 int main()
@@ -45,10 +46,8 @@ int main()
 			button = *((int *)buff);
 			if(r > 4)
 				insert_in_line(&readline, buff);
-			else if (button == BUTTON_UP)
-				history_next(&readline);
-			else if (button == BUTTON_DOWN)
-				history_previous(&readline);
+			else if (button == BUTTON_UP || button == BUTTON_DOWN)
+				move_in_history(&readline, button);
 			else if (button == BUTTON_RIGHT)
 				cur_right(&readline);
 			else if (button == BUTTON_LEFT)
@@ -56,7 +55,7 @@ int main()
 			else if (button == BUTTON_HOME)
 				cur_goto(&readline, readline.origin_cursor);
 			else if (button == BUTTON_END)
-				cur_goto(&readline, readline.origin_cursor + readline.line_len);
+				cur_goto(&readline, readline.origin_cursor + readline.cmd->tmp_len);
 			else if (button == BUTTON_ALT_RIGHT || button == BUTTON_ALT_LEFT)
 				cur_move_by_word(&readline, button);
 			else if (button == BUTTON_DEL || button == BUTTON_DEL2)

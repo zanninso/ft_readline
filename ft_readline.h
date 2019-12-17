@@ -6,7 +6,7 @@
 /*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 12:55:33 by yabakhar          #+#    #+#             */
-/*   Updated: 2019/12/16 03:19:00 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2019/12/18 00:44:46 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,21 +37,22 @@
 
 typedef struct	s_cmd_history
 {
-	char *line;
-	int len;
-	struct s_cmd_history *next;
-	struct s_cmd_history *prev;
+	char					*tmp_line;
+	char					*line;
+	int						len;
+	int						tmp_len;
+	struct s_cmd_history	*next;
+	struct s_cmd_history	*prev;
 }				t_cmd_history;
 
 typedef struct s_readline
 {
 	struct termios config;
-	t_cmd_history *current_cmd_history;
-	char *line;
-	char *tmp_line;
+	t_cmd_history *cmd;
+	// char *line;
 	int history_index;
-	int line_len;
-	int tmp_len;
+	// int line_len;
+	// int tmp_len;
 	int col;
 	int row;
 	int win_col;
@@ -96,8 +97,10 @@ void			rewrite_line(t_readline *readline);
 /*
 **	CMD History
 */
+void			clean_hsitory(void);
 void			add_to_history(char *str, int len);
 void			free_history(void);
+void			move_in_history(t_readline *readline, int button);
 t_cmd_history	*get_cmd_history_head(void);
 
 void			set_signal(void);
