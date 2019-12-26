@@ -6,7 +6,7 @@
 /*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/14 08:55:45 by aait-ihi          #+#    #+#             */
-/*   Updated: 2019/12/18 00:49:14 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2019/12/26 02:06:40 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,10 +68,13 @@ void clean_hsitory()
 			to_free = *next;
 			*next = (*next)->next;
 			free(to_free->line);
+			if(to_free->tmp_line != to_free->line)
 			free(to_free->tmp_line);
 			free(to_free);
 			continue;
 		}
+		else
+			break ;
 		next = &(*next)->next;
 	}
 }

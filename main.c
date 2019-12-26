@@ -6,7 +6,7 @@
 /*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/07 00:57:15 by aait-ihi          #+#    #+#             */
-/*   Updated: 2019/12/17 17:03:13 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2019/12/26 02:06:53 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ void init(t_readline *readline)
 {
 	g_readline = readline;
 	ft_bzero(readline, sizeof(t_readline));
-	//readline->line = ft_strdup("");
 	if (tcgetattr(0, &readline->config) < 0)
 		puts("error");
 	readline->config.c_lflag &= ~(ECHO | ICANON);
@@ -61,7 +60,7 @@ int main()
 			else if (button == BUTTON_DEL || button == BUTTON_DEL2)
 				remove_from_line(&readline);
 			else if (button == BUTTON_ENTER)
-				end_readline(&readline);
+				end_readline(&readline, 0);
 			else 
 				insert_in_line(&readline, buff);
 		}

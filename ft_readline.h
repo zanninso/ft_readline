@@ -6,7 +6,7 @@
 /*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 12:55:33 by yabakhar          #+#    #+#             */
-/*   Updated: 2019/12/18 00:44:46 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2019/12/26 02:06:45 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void			get_cursor_position(t_readline *readline);
 /*
 **	Events
 */
-void end_readline(t_readline *readline);
+void end_readline(t_readline *readline, int suit);
 void history_previous(t_readline *readline);
 void history_next(t_readline *readline);
 
