@@ -6,7 +6,7 @@
 /*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/07 06:44:03 by aait-ihi          #+#    #+#             */
-/*   Updated: 2019/12/18 00:16:48 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2020/01/05 02:00:15 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,25 +36,37 @@ void cur_move_by_word(t_readline *readline, int button)
 	cur_goto(readline, readline->cursor + diff);
 }
 
-// void cur_up(t_readline *readline)
-// {
-// 	const int limit = readline->origin_cursor + readline->col;
+t_point calc_cur_pos(t_point cursor, int col_count)
+{
+	t_point ret;
+
+	ret.x = cursor.x % col_count;
+	ret.y = cursor.y + (cursor.x / col_count);
+}
+
+void cur_up(t_readline *readline)
+{
+	char *tmp;
 	
-// 	readline->cursor -= readline->cursor >= limit ? readline->col : 0;
-// 	cur_goto(readline, readline->cursor);
-// }
+	tmp = ft_rskip_chars(readline->cmd->tmp_line, "\n", 0);
+	if(*tmp == '\n')
+		readline->cursor.y--;
+	cur_goto(readline, readline->cursor);
+}
 
-// void cur_down(t_readline *readline)
-// {
-// 	const int col = readline->col;
-// 	const int limit = readline->origin_cursor + readline->line_len - col;
-
-// 	readline->cursor += readline->cursor <= limit ? readline->col : 0;
-// 	cur_goto(readline, readline->cursor);
-// }
+void cur_down(t_readline *readline)
+{
+	char *tmp;
+	
+	tmp = ft_skip_chars(readline->cmd->tmp_line, "\n");
+	if (*tmp == '\n')
+		readline->cursor.y++;
+	cur_goto(readline, readline->cursor);
+}
 
 void cur_left(t_readline *readline)
 {
+	if()
 	readline->cursor -= readline->cursor == readline->origin_cursor ? 0 : 1;
 	cur_goto(readline, readline->cursor);
 }
