@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aait-ihi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/07 00:57:15 by aait-ihi          #+#    #+#             */
-/*   Updated: 2019/12/26 02:06:53 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2020/01/08 02:33:31 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,10 @@ void init(t_readline *readline)
 
 int main()
 {
-	t_readline	readline;
-	char		buff[4001];
-	int			r;
-	int			button;
+	t_readline readline;
+	char buff[4001];
+	int r;
+	int button;
 
 	ft_printf("➜  ft_readline git:(master) ");
 	init(&readline);
@@ -43,7 +43,7 @@ int main()
 		if ((r = read(0, buff, 4000)) > 0)
 		{
 			button = *((int *)buff);
-			if(r > 4)
+			if (r > 4)
 				insert_in_line(&readline, buff);
 			else if (button == BUTTON_UP || button == BUTTON_DOWN)
 				move_in_history(&readline, button);
@@ -51,17 +51,21 @@ int main()
 				cur_right(&readline);
 			else if (button == BUTTON_LEFT)
 				cur_left(&readline);
-			else if (button == BUTTON_HOME)
-				cur_goto(&readline, readline.origin_cursor);
-			else if (button == BUTTON_END)
-				cur_goto(&readline, readline.origin_cursor + readline.cmd->tmp_len);
-			else if (button == BUTTON_ALT_RIGHT || button == BUTTON_ALT_LEFT)
-				cur_move_by_word(&readline, button);
-			else if (button == BUTTON_DEL || button == BUTTON_DEL2)
-				remove_from_line(&readline);
+			else if (button == BUTTON_UP)
+				cur_up(&readline);
+			else if (button == BUTTON_DOWN)
+				cur_down(&readline);
+			// else if (button == BUTTON_HOME)
+			// 	cur_goto(&readline, readline.origin_cursor);
+			// else if (button == BUTTON_END)
+			// 	cur_goto(&readline, readline.origin_cursor + readline.cmd->tmp_len);
+			// else if (button == BUTTON_ALT_RIGHT || button == BUTTON_ALT_LEFT)
+			// 	cur_move_by_word(&readline, button);
+			// else if (button == BUTTON_DEL || button == BUTTON_DEL2)
+			// 	remove_from_line(&readline);
 			else if (button == BUTTON_ENTER)
 				end_readline(&readline, 0);
-			else 
+			else
 				insert_in_line(&readline, buff);
 		}
 	}

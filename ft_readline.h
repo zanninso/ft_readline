@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_readline.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aait-ihi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 12:55:33 by yabakhar          #+#    #+#             */
-/*   Updated: 2020/01/05 02:04:44 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2020/01/08 02:25:08 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,8 @@ void cur_down(t_readline *readline);
 void cur_right(t_readline *readline);
 void cur_left(t_readline *readline);
 void cur_move_by_word(t_readline *readline, int button);
-void cur_goto(t_readline *readline, int cursor);
+// void cur_goto(t_readline *readline, int cursor);
+void cur_goto(t_readline *readline, t_point cursor);
 void get_cursor_position(t_readline *readline);
 
 /*

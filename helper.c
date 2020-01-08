@@ -3,24 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   helper.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aait-ihi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 14:44:38 by aait-ihi          #+#    #+#             */
-/*   Updated: 2019/12/14 08:43:19 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2020/01/08 02:59:12 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_readline.h"
 
-void cur_goto(t_readline *readline, int cursor)
+void cur_goto(t_readline *readline, t_point cursor)
 {
-	int co;
-	int li;
-
-	li = cursor / readline->col;
-	co = cursor % readline->col;
 	readline->cursor = cursor;
-	tputs(tgoto(tgetstr("cm", 0), co, li), 0, output);
+	tputs(tgoto(tgetstr("cm", 0), cursor.x, cursor.y), 0, output);
 }
 
 void get_cursor_position(t_readline *readline)
@@ -35,7 +30,7 @@ void get_cursor_position(t_readline *readline)
 	row = ft_atoi(buff + 2);
 	buff = (char *)ft_skip_unitl_char(buff, ";");
 	col = ft_atoi(buff + 1);
-	readline->origin_cursor = (row - 1) * readline->col + col - 1;
+	readline->origin_cursor = (t_point){col - 1, row - 1};
 	readline->cursor = readline->origin_cursor;
 }
 

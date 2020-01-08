@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_history.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aait-ihi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/14 08:55:45 by aait-ihi          #+#    #+#             */
-/*   Updated: 2019/12/26 02:06:40 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2020/01/08 02:32:03 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ void clean_hsitory()
 void move_in_history(t_readline *readline, int button)
 {
 	char *new_line;
-	const int cursor = readline->origin_cursor;
+	//const int cursor = readline->origin_cursor;
 	
 	if (button == BUTTON_UP && readline->cmd->next)
 		readline->cmd = readline->cmd->next;
@@ -95,5 +95,6 @@ void move_in_history(t_readline *readline, int button)
 			readline->cmd->tmp_len = readline->cmd->len;
 		}
 		rewrite_line(readline);
-		cur_goto(readline, cursor + readline->cmd->tmp_len);
+		readline->cursor =  readline->origin_cursor;
+		//cur_goto(readline, cursor + readline->cmd->tmp_len);
 }
