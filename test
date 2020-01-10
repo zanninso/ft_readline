@@ -1,1 +1,31 @@
-d fjsd
+function(*ptr)
+{
+    *head;
+    *cur;
+
+    head = NULL;
+    while(head)
+    {
+        if (head == f)
+        {
+            if(!ptr)
+            {
+                head = ptr;
+                cur = head;
+            }
+            else
+            {
+                cur->next_file = ptr;
+                cur = cur->next_file;
+            }
+        }
+       ptr = ptr->next;
+    }
+    return(head);
+}
+
+
+main()
+{
+    fucntion(&head);
+}

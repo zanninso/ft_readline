@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cursor_move.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/07 06:44:03 by aait-ihi          #+#    #+#             */
-/*   Updated: 2020/01/08 03:03:25 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2020/01/10 00:05:35 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 // void cur_move_by_word(t_readline *readline, int button)
 // {
-// 	const int current_cur = readline->cursor - readline->origin_cursor;
+// 	const int current_cur = readline->cursor - readline->o_cursor;
 // 	int diff;
 // 	char *tmp;
 // 	const char *line = readline->cmd->tmp_line;
@@ -38,64 +38,40 @@
 
 void cur_up(t_readline *readline)
 {
-	char *tmp;
-	char *tmp2;
-	int diff;
-
-	diff = 0;
-	tmp = ft_rskip_chars(readline->cmd->tmp_line, "\n", readline->line_index);
-	if (*tmp != '\n')
-		return;
-	tmp--;
-	diff = readline->cmd->line - tmp;
-	tmp = ft_rskip_chars(tmp, "\n", readline->line_index - diff);
-	diff = readline->cmd->line - tmp;
-	readline->cursor.y -= !!(diff % readline->col) + (diff / readline->col);
-	tmp2 = ft_skip_chars(tmp, "\n");
-	readline->cursor.x = ft_min(readline->cursor.x, tmp2 - tmp);
-	diff += readline->cursor.x;
-	readline->line_index -= diff;
-	cur_goto(readline, readline->cursor);
+	if (readline->line_props.index <= 0)
+	{
+		readline->line_props.index--;
+		cur_goto(readline, readline->cursor);
+	}
 }
 
 void cur_down(t_readline *readline)
 {
-	char *tmp;
-	char *tmp2;
-	int diff;
-
-	diff = 0;
-	tmp = ft_skip_chars(readline->cmd->tmp_line + readline->line_index, "\n");
-	if (*tmp == '\n')
+	if (readline->line_props.index < readline->line_props.linecount)
 	{
-		tmp++;
-		diff = tmp - readline->cmd->tmp_line;
-		readline->cursor.y += diff % readline->col + diff / readline->col;
+		readline->line_props.index++;
+		cur_goto(readline, readline->cursor);
 	}
-	tmp2 = ft_skip_chars(tmp, "\n");
-	readline->cursor.x = ft_min(readline->cursor.x, tmp2 - tmp);
-	diff += readline->cursor.x;
-	readline->line_index += diff;
-	cur_goto(readline, readline->cursor);
 }
 
 void cur_left(t_readline *readline)
 {
 	if (readline->line_index - 1 < 0)
-		return ;
-	readline->line_index--;
-	readline->cursor.x += readline->col - 1; 
-	readline->cursor.y -= !(readline->cursor.x / readline->col);
-	readline->cursor.x = readline->cursor.x % readline->col;
+		return;
+	readline->cursor.x--;
 	cur_goto(readline, readline->cursor);
 }
 
 void cur_right(t_readline *readline)
 {
 	if (readline->line_index + 1 > readline->cmd->tmp_len)
-		return ;
-	readline->line_index++;
-	readline->cursor.y += (readline->cursor.x + 1) / readline->col;
-	readline->cursor.x = (readline->cursor.x + 1) % readline->col;
+		return;
+	if (readline->cmd->tmp_line[readline->line_index] == '\n')
+	{
+		readline->cursor.x = 0;
+		readline->cursor.y++;
+	}
+	else
+		readline->cursor.x++;
 	cur_goto(readline, readline->cursor);
 }

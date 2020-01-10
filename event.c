@@ -6,7 +6,7 @@
 /*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 14:44:12 by aait-ihi          #+#    #+#             */
-/*   Updated: 2019/12/26 02:06:21 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2020/01/08 18:00:51 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,23 +17,22 @@ void init(t_readline *readline);
 void end_readline(t_readline *readline, int suit)
 {
 	t_cmd_history *head;
+	char *tmp;
 
 	head = get_cmd_history_head();
-	if (suit)
+	if (suit && head->next)
 	{
-		head->next->line = ft_strjoin(head->next->line, readline->cmd->tmp_line);
-		head->next->len = head->next->len + readline->cmd->tmp_len;
-		if (head->tmp_line != head->line)
-			ft_strdel(&head->tmp_line);
+		tmp = ft_strnjoin((char *[]){head->next->line, "\n", readline->cmd->tmp_line}, 3);
 		ft_strdel(&head->line);
+		free(readline->cmd->tmp_line);
+		readline->cmd->tmp_line = tmp;
+		readline->cmd->tmp_len = head->next->len + readline->cmd->tmp_len + 1;
+		head = head->next;
 	}
-	else
-	{
-		head->line = readline->cmd->tmp_line;
-		ft_strdel(&head->tmp_line);
-		head->len = readline->cmd->tmp_len;
-	}
+	head->line = readline->cmd->tmp_line;
+	head->len = readline->cmd->tmp_len;
 	readline->cmd->tmp_line = NULL;
+	ft_strdel(&head->tmp_line);
 	clean_hsitory();
 	ft_printf("\n➜  ft_readline git:(master) ");
 	init(readline);

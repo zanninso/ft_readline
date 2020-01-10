@@ -6,7 +6,7 @@
 #    By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/12/07 00:56:57 by aait-ihi          #+#    #+#              #
-#    Updated: 2019/12/15 16:44:49 by aait-ihi         ###   ########.fr        #
+#    Updated: 2020/01/09 17:05:27 by aait-ihi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ CFLAGS = -Wall -Werror -Wextra -g
 
 CC = gcc
 
-SRCS = main.c helper.c  cursor_move.c signal.c line_operation.c event.c cmd_history.c
+SRCS = main.c cursor_helper.c cursor_move.c signal.c line_operation.c event.c cmd_history.c
 
 LIBFT = libft/libft.a
 
@@ -34,11 +34,11 @@ libf :
 $(OBJ) : ft_readline.h
 
 clean:
-	make clean -C libft
+	#make clean -C libft
 	rm -f $(OBJ)
 
 fclean: clean
-	make fclean -C libft
+	#make fclean -C libft
 	rm -f $(NAME)
 
 re: fclean all

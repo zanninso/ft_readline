@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_readline.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 12:55:33 by yabakhar          #+#    #+#             */
-/*   Updated: 2020/01/08 02:25:08 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2020/01/09 17:16:36 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 #include <sys/stat.h>
 #include "libft/includes/libft.h"
 #include <sys/ioctl.h>
+#define BUTTON_PUP 2117425947
+#define BUTTON_PDOWN 2117491483
 #define BUTTON_UP 4283163
 #define BUTTON_DOWN 4348699
 #define BUTTON_RIGHT 4414235
@@ -51,13 +53,20 @@ typedef struct s_cmd_history
 	struct s_cmd_history *prev;
 } t_cmd_history;
 
+typedef struct s_line
+{
+	int *details;
+	int index;
+	int linecount;
+}t_line;
+
 typedef struct s_readline
 {
 	struct termios config;
 	t_cmd_history *cmd;
 	t_point cursor;
-	t_point origin_cursor;
-	int history_index;
+	t_point o_cursor;
+	t_line line_props;
 	int line_index;
 	int col;
 	int row;
@@ -95,9 +104,10 @@ void configure_terminal(t_readline *readline);
 /*
 **	Line Operations
 */
-void insert_in_line(t_readline *readline, char *str);
-void remove_from_line(t_readline *readline);
-void rewrite_line(t_readline *readline);
+void	insert_in_line(t_readline *readline, char *str);
+void	remove_from_line(t_readline *readline);
+void	rewrite_line(t_readline *readline);
+int		*get_line_details(t_readline *readline);
 
 /*
 **	CMD History
