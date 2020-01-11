@@ -6,35 +6,34 @@
 /*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/07 06:44:03 by aait-ihi          #+#    #+#             */
-/*   Updated: 2020/01/11 01:21:21 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2020/01/11 23:51:07 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_readline.h"
 
-// void cur_move_by_word(t_readline *readline, int button)
-// {
-// 	const int current_cur = readline->cursor - readline->o_cursor;
-// 	int diff;
-// 	char *tmp;
-// 	const char *line = readline->cmd->tmp_line;
+void cur_move_by_word(t_readline *readline, int button)
+{
+	char *tmp;
+	const char *line = readline->cmd->tmp_line;
 
-// 	tmp = NULL;
-// 	if (button == BUTTON_ALT_RIGHT)
-// 	{
-// 		tmp = (char *)ft_skip_unitl_char(line + current_cur, " '\";");
-// 		tmp = ft_skip_chars(tmp, " '\";");
-// 	}
-// 	else if (button == BUTTON_ALT_LEFT)
-// 	{
-// 		tmp = ft_rskip_chars(line, " '\";", current_cur - 1);
-// 		tmp = ft_rskip_unitl_char(line, " '\";", tmp - line);
-// 		if (ft_isinstr(*tmp, " '\";"))
-// 			tmp++;
-// 	}
-// 	diff = tmp - &line[current_cur];
-// 	cur_goto(readline, readline->cursor + diff);
-// }
+	tmp = NULL;
+	if (button == BUTTON_ALT_RIGHT)
+	{
+		tmp = (char *)ft_skip_unitl_char(line + readline->line_index, " '\";");
+		tmp = ft_skip_chars(tmp, " '\";");
+	}
+	else if (button == BUTTON_ALT_LEFT)
+	{
+		tmp = ft_rskip_chars(line, " '\";", readline->line_index - 1);
+		tmp = ft_rskip_unitl_char(line, " '\";", tmp - line);
+		if (ft_isinstr(*tmp, " '\";"))
+			tmp++;
+	}
+	readline->line_index += tmp - &line[readline->line_index];
+	set_cursor_from_index(readline);
+	cur_goto(readline, readline->cursor);
+}
 
 void cur_up(t_readline *readline)
 {
@@ -90,8 +89,36 @@ void cur_right(t_readline *readline)
 		readline->cursor = 0;
 		return (cur_down(readline));
 	}
-	if (readline->cursor >= line_props.details[line_props.index] )
+	if (readline->cursor >= line_props.details[line_props.index])
 		return;
 	readline->cursor++;
 	cur_goto(readline, readline->cursor);
+}
+
+void to_start_or_end(t_readline *readline, int button)
+{
+	const int len = readline->line_props.details[readline->line_props.index];
+	const int count = readline->line_props.linecount;
+	int cursor;
+
+	if (button == BUTTON_HOME)
+	{
+		if (readline->cursor == 0 && readline->line_props.index > 0)
+		{
+			readline->line_props.index--;
+			set_virtual_origin(readline);
+		}
+		cursor = 0;
+	}
+	else
+	{
+		if (readline->cursor == len - 1 && readline->line_props.index < count - 1)
+		{
+			readline->line_props.index++;
+			set_virtual_origin(readline);
+		}
+		cursor = readline->line_props.details[readline->line_props.index];
+		cursor -= readline->line_props.index != count - 1;
+	}
+	cur_goto(readline, cursor);
 }

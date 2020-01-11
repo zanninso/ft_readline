@@ -6,7 +6,7 @@
 /*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 12:55:33 by yabakhar          #+#    #+#             */
-/*   Updated: 2020/01/10 16:07:25 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2020/01/11 23:49:06 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,11 +85,15 @@ void cur_down(t_readline *readline);
 void cur_right(t_readline *readline);
 void cur_left(t_readline *readline);
 void cur_move_by_word(t_readline *readline, int button);
-// void cur_goto(t_readline *readline, int cursor);
+void to_start_or_end(t_readline *readline, int button);
+
+/*
+**	Cursor Helper Functions
+*/
 void set_virtual_origin(t_readline *readline);
 void cur_goto(t_readline *readline, int cursor);
 void get_cursor_position(t_readline *readline);
-
+void set_cursor_from_index(t_readline *readline);
 /*
 **	Events
 */

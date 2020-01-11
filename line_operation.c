@@ -6,32 +6,50 @@
 /*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/12 22:57:02 by aait-ihi          #+#    #+#             */
-/*   Updated: 2020/01/11 02:10:49 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2020/01/11 21:06:27 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_readline.h"
 
-// void update_o_cursor(t_readline *readline)
-// {
-// 	if(readline->cursor / readline->col == readline->row)
-// 	readline->o_cursor -= readline->col;
-// }
+int get_virtua_line_count(t_readline *readline)
+{
+	int count;
+	int i;
+	const int *details = readline->line_props.details;
+
+	i = 0;
+	count = !!((details[i] + readline->o_cursor.x) % readline->col) + ((details[i] + readline->o_cursor.x) / readline->col);
+	i++;
+	while (i < readline->line_props.linecount)
+	{
+		count += !!(details[i] % readline->col) + (details[i] / readline->col);
+		i++;
+	}
+	return(count);
+}
+
+void update_o_cursor(t_readline *readline)
+{
+	int diff;
+
+	diff = (get_virtua_line_count(readline) + readline->o_cursor.y) - readline->row;
+	if (diff > 0)
+	{
+		readline->o_cursor.y -= diff;
+		set_virtual_origin(readline);
+	}
+}
 
 void rewrite_line(t_readline *readline)
 {
-	//update_o_cursor(readline);
-	int current_cursor = readline->cursor;
-	int index = readline->line_props.index;
-
-	readline->line_props.index = 0;
-	set_virtual_origin(readline);
-	cur_goto(readline, 0);
+	update_o_cursor(readline);
+	tputs(tgoto(tgetstr("cm", 0), 0, readline->o_cursor.y), 0, output);
 	tputs(tgetstr("cd", NULL), 0, output);
+	ft_printf("➜  ft_readline git:(master) ");
 	ft_putstr(readline->cmd->tmp_line);
-	readline->line_props.index = index;
-	set_virtual_origin(readline);
-	cur_goto(readline, current_cursor);
+	ft_printf(" ");
+	cur_goto(readline, readline->cursor);
 }
 
 void insert_in_line(t_readline *readline, char *str)

@@ -6,7 +6,7 @@
 /*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 14:44:38 by aait-ihi          #+#    #+#             */
-/*   Updated: 2020/01/10 20:50:08 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2020/01/12 00:04:17 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,19 +44,24 @@ int cursor_to_index(t_readline *readline, int cursor)
 	return (index);
 }
 
-t_point index_to_cursor(t_readline *readline)
+void set_cursor_from_index(t_readline *readline)
 {
 	int index;
-	t_point cursor;
+	int i;
 
-	cursor = readline->o_cursor;
-	index = cursor.x;
-	while (cursor.y)
+	i = 0;
+	index = 0;
+	while (1)
 	{
-		cursor.y--;
-		index += readline->line_props.details[cursor.y];
+		index += readline->line_props.details[i];
+		if(i < readline->line_props.index || readline->line_index <= index)
+			break;
+		i++;
 	}
-	return (cursor);
+	index -= readline->line_props.details[i];
+	readline->line_props.index = i;
+	readline->cursor = readline->line_index - index;
+	set_virtual_origin(readline);
 }
 
 void cur_goto(t_readline *readline, int cursor)

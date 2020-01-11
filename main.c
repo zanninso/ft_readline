@@ -6,7 +6,7 @@
 /*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/07 00:57:15 by aait-ihi          #+#    #+#             */
-/*   Updated: 2020/01/11 01:56:33 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2020/01/11 23:48:06 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,12 +63,10 @@ int main()
 				cur_up(&readline);
 			else if (button == BUTTON_PDOWN)
 				cur_down(&readline);
-			// else if (button == BUTTON_HOME)
-			// 	cur_goto(&readline, readline.o_cursor);
-			// else if (button == BUTTON_END)
-			// 	cur_goto(&readline, readline.o_cursor + readline.cmd->tmp_len);
-			// else if (button == BUTTON_ALT_RIGHT || button == BUTTON_ALT_LEFT)
-			// 	cur_move_by_word(&readline, button);
+			else if (button == BUTTON_HOME || button == BUTTON_END)
+				to_start_or_end(&readline, button);
+			else if (button == BUTTON_ALT_RIGHT || button == BUTTON_ALT_LEFT)
+				cur_move_by_word(&readline, button);
 			else if (button == BUTTON_DEL || button == BUTTON_DEL2)
 				remove_from_line(&readline);
 			else if (button == BUTTON_ENTER)
