@@ -6,7 +6,7 @@
 /*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/07 06:44:03 by aait-ihi          #+#    #+#             */
-/*   Updated: 2020/01/10 00:05:35 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2020/01/11 01:21:21 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,40 +38,60 @@
 
 void cur_up(t_readline *readline)
 {
-	if (readline->line_props.index <= 0)
+	t_line line_props;
+
+	if (readline->line_props.index > 0)
 	{
 		readline->line_props.index--;
+		line_props = readline->line_props;
+		readline->cursor = ft_min(line_props.details[line_props.index] - 1, readline->cursor);
+		set_virtual_origin(readline);
 		cur_goto(readline, readline->cursor);
 	}
 }
 
 void cur_down(t_readline *readline)
 {
-	if (readline->line_props.index < readline->line_props.linecount)
+	t_line line_props;
+
+	if (readline->line_props.index + 1 < readline->line_props.linecount)
 	{
 		readline->line_props.index++;
+		line_props = readline->line_props;
+		readline->cursor = ft_min(line_props.details[line_props.index] - 1, readline->cursor);
+		set_virtual_origin(readline);
 		cur_goto(readline, readline->cursor);
 	}
 }
 
 void cur_left(t_readline *readline)
 {
-	if (readline->line_index - 1 < 0)
+	t_line line_props;
+
+	line_props = readline->line_props;
+	if (readline->cursor - 1 < 0 && readline->line_props.index > 0)
+	{
+		readline->cursor = line_props.details[line_props.index - 1] - 1;
+		return (cur_up(readline));
+	}
+	else if (readline->line_index - 1 < 0)
 		return;
-	readline->cursor.x--;
+	readline->cursor--;
 	cur_goto(readline, readline->cursor);
 }
 
 void cur_right(t_readline *readline)
 {
-	if (readline->line_index + 1 > readline->cmd->tmp_len)
-		return;
-	if (readline->cmd->tmp_line[readline->line_index] == '\n')
+	t_line line_props;
+
+	line_props = readline->line_props;
+	if (readline->cursor + 1 >= line_props.details[line_props.index] && readline->line_props.index + 1 < readline->line_props.linecount)
 	{
-		readline->cursor.x = 0;
-		readline->cursor.y++;
+		readline->cursor = 0;
+		return (cur_down(readline));
 	}
-	else
-		readline->cursor.x++;
+	if (readline->cursor >= line_props.details[line_props.index] )
+		return;
+	readline->cursor++;
 	cur_goto(readline, readline->cursor);
 }

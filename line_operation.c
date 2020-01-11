@@ -6,7 +6,7 @@
 /*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/12 22:57:02 by aait-ihi          #+#    #+#             */
-/*   Updated: 2020/01/09 20:38:53 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2020/01/11 02:10:49 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,16 @@
 void rewrite_line(t_readline *readline)
 {
 	//update_o_cursor(readline);
-	t_point current_cursor = readline->cursor;
-	cur_goto(readline, readline->o_cursor);
+	int current_cursor = readline->cursor;
+	int index = readline->line_props.index;
+
+	readline->line_props.index = 0;
+	set_virtual_origin(readline);
+	cur_goto(readline, 0);
 	tputs(tgetstr("cd", NULL), 0, output);
 	ft_putstr(readline->cmd->tmp_line);
+	readline->line_props.index = index;
+	set_virtual_origin(readline);
 	cur_goto(readline, current_cursor);
 }
 
@@ -49,33 +55,43 @@ void insert_in_line(t_readline *readline, char *str)
 		free(line);
 		readline->cmd->tmp_line = new_line;
 		readline->cmd->tmp_len += i;
-		readline->line_props.details[readline->cursor.y - readline->o_cursor.y] += i;
-		readline->cursor.x += i;
+		readline->line_props.details[readline->line_props.index] += i;
+		readline->cursor += i;
 	}
 	rewrite_line(readline);
 }
 
-// void remove_from_line(t_readline *readline)
-// {
-// 	char *new_line;
-// 	char *line;
-// 	const int cur_position = readline->cursor - readline->o_cursor;
+void remove_from_line(t_readline *readline)
+{
+	char *new_line;
+	char *line;
+	char c;
 
-// 	line = readline->cmd->tmp_line;
-// 	if (readline->cursor > readline->o_cursor)
-// 	{
-// 		line[cur_position - 1] = 0;
-// 		new_line = ft_strjoin(line, line + cur_position);
-// 		if (new_line)
-// 		{
-// 			free(line);
-// 			readline->cmd->tmp_line = new_line;
-// 			readline->cmd->tmp_len--;
-// 			readline->cursor--;
-// 		}
-// 	}
-// 	rewrite_line(readline);
-// }
+	line = readline->cmd->tmp_line;
+	if (readline->line_index > 0)
+	{
+		c = line[readline->line_index - 1];
+		line[readline->line_index - 1] = 0;
+		new_line = ft_strjoin(line, line + readline->line_index);
+		if (new_line)
+		{
+			free(line);
+			readline->cmd->tmp_line = new_line;
+			readline->cmd->tmp_len--;
+			readline->line_index--;
+			readline->line_props.details[readline->line_props.index]--;
+			if (c == '\n')
+			{
+				readline->line_props.index--;
+				readline->cursor = readline->line_props.details[readline->line_props.index];
+				readline->line_props.details = get_line_details(readline);
+			}
+			else
+				readline->cursor--;
+		}
+	}
+	rewrite_line(readline);
+}
 
 int *get_line_details(t_readline *readline)
 {
@@ -87,13 +103,13 @@ int *get_line_details(t_readline *readline)
 
 	line = readline->cmd->tmp_line;
 	line_count = 1 + ft_str_occurence(line, '\n');
-	if(!(ret = malloc(sizeof(int) * line_count)))
+	if (!(ret = malloc(sizeof(int) * line_count)))
 		return (NULL);
 	i = 0;
 	readline->line_props.linecount = line_count;
-	while((tmp = (char *)ft_skip_unitl_char(line, "\n")))
+	while ((tmp = (char *)ft_skip_unitl_char(line, "\n")))
 	{
-		*tmp  == '\n' ? tmp++ : 0;
+		*tmp == '\n' ? tmp++ : 0;
 		ret[i++] = tmp - line;
 		line = tmp;
 		if (*tmp == '\0')

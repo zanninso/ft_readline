@@ -6,7 +6,7 @@
 /*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/14 08:55:45 by aait-ihi          #+#    #+#             */
-/*   Updated: 2020/01/09 17:16:32 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2020/01/10 17:06:08 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ void move_in_history(t_readline *readline, int button)
 			readline->line_props.details = get_line_details(readline);
 		}
 	rewrite_line(readline);
-	readline->cursor = readline->o_cursor;
+	readline->ov_cursor = readline->o_cursor;
 	readline->line_index = 0;
 	//cur_goto(readline, cursor + readline->cmd->tmp_len);
 }

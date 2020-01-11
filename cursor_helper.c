@@ -6,19 +6,36 @@
 /*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 14:44:38 by aait-ihi          #+#    #+#             */
-/*   Updated: 2020/01/09 22:20:18 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2020/01/10 20:50:08 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_readline.h"
 
-int cursor_to_index(t_readline *readline, t_point cursor)
+void set_virtual_origin(t_readline *readline)
+{
+	int i;
+	t_point origin;
+
+	origin = readline->o_cursor;
+	i = readline->line_props.index;
+	while (i > 0)
+	{
+		i--;
+		origin.y += readline->line_props.details[i] / readline->col;
+		origin.y += (readline->line_props.details[i] % readline->col) > 0;
+		origin.x = 0;
+	}
+	readline->ov_cursor = origin;
+}
+
+int cursor_to_index(t_readline *readline, int cursor)
 {
 	int index;
 	int i;
 
-	i = cursor.y - readline->o_cursor.y;
-	index = cursor.x;
+	i = readline->line_props.index;
+	index = cursor;
 	while (i)
 	{
 		i--;
@@ -32,8 +49,7 @@ t_point index_to_cursor(t_readline *readline)
 	int index;
 	t_point cursor;
 
-	cursor.x = readline->cursor.x;
-	cursor.y = readline->cursor.y - readline->o_cursor.y;
+	cursor = readline->o_cursor;
 	index = cursor.x;
 	while (cursor.y)
 	{
@@ -43,27 +59,16 @@ t_point index_to_cursor(t_readline *readline)
 	return (cursor);
 }
 
-void cur_goto(t_readline *readline, t_point cursor)
+void cur_goto(t_readline *readline, int cursor)
 {
-	const t_point origin = readline->o_cursor;
-	
-	if(cursor.y - origin.y == 0)
-		cursor.x -= origin.x;
-	if (cursor.x < 0)
-	{
-		cursor.y--;
-		cursor.x = readline->line_props.details[cursor.y - origin.y] - 1;
-	}
-	else if (cursor.x > readline->line_props.details[cursor.y - origin.y])
-	{
-		cursor.y++;
-		cursor.x = 0;
-	}
-	readline->line_index = cursor_to_index(readline, cursor);
-	if (cursor.y - origin.y == 0)
-		cursor.x += origin.x;
+	t_point origin = readline->ov_cursor;
+
+	origin = readline->ov_cursor;
+	origin.y += (origin.x + cursor) / readline->col;
+	origin.x = (origin.x + cursor) % readline->col;
 	readline->cursor = cursor;
-	tputs(tgoto(tgetstr("cm", 0), cursor.x, cursor.y), 0, output);
+	readline->line_index = cursor_to_index(readline, cursor);
+	tputs(tgoto(tgetstr("cm", 0), origin.x, origin.y), 0, output);
 }
 
 void get_cursor_position(t_readline *readline)
@@ -87,7 +92,7 @@ void get_cursor_position(t_readline *readline)
 	buff = (char *)ft_skip_unitl_char(buff, ";");
 	col = ft_atoi(buff + 1);
 	readline->o_cursor = (t_point){col - 1, row - 1};
-	readline->cursor = readline->o_cursor;
+	readline->ov_cursor = readline->o_cursor;
 }
 
 int output(int c)

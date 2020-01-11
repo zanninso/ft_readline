@@ -6,7 +6,7 @@
 /*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 12:55:33 by yabakhar          #+#    #+#             */
-/*   Updated: 2020/01/09 17:16:36 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2020/01/10 16:07:25 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,9 +64,10 @@ typedef struct s_readline
 {
 	struct termios config;
 	t_cmd_history *cmd;
-	t_point cursor;
-	t_point o_cursor;
 	t_line line_props;
+	t_point o_cursor;
+	t_point ov_cursor;
+	int cursor;
 	int line_index;
 	int col;
 	int row;
@@ -85,7 +86,8 @@ void cur_right(t_readline *readline);
 void cur_left(t_readline *readline);
 void cur_move_by_word(t_readline *readline, int button);
 // void cur_goto(t_readline *readline, int cursor);
-void cur_goto(t_readline *readline, t_point cursor);
+void set_virtual_origin(t_readline *readline);
+void cur_goto(t_readline *readline, int cursor);
 void get_cursor_position(t_readline *readline);
 
 /*
