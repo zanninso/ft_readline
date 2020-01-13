@@ -6,7 +6,7 @@
 /*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 14:44:38 by aait-ihi          #+#    #+#             */
-/*   Updated: 2020/01/12 00:04:17 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2020/01/13 02:14:15 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,18 +48,25 @@ void set_cursor_from_index(t_readline *readline)
 {
 	int index;
 	int i;
+	const int *details = readline->line_props.details;
 
 	i = 0;
 	index = 0;
+	if(readline->cmd->tmp_len == readline->line_index)
+	{
+		readline->cursor = details[readline->line_props.index];
+		return;
+	}
 	while (1)
 	{
-		index += readline->line_props.details[i];
-		if(i < readline->line_props.index || readline->line_index <= index)
+		if (i >= readline->line_props.linecount)
 			break;
+		if (BETWEEN(readline->line_index, index, index + details[i] - 1))
+			break;
+		index += readline->line_props.details[i];
 		i++;
 	}
-	index -= readline->line_props.details[i];
-	readline->line_props.index = i;
+	readline->line_props.index = i % readline->line_props.linecount;
 	readline->cursor = readline->line_index - index;
 	set_virtual_origin(readline);
 }

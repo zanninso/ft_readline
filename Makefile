@@ -6,7 +6,7 @@
 #    By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/12/07 00:56:57 by aait-ihi          #+#    #+#              #
-#    Updated: 2020/01/09 17:05:27 by aait-ihi         ###   ########.fr        #
+#    Updated: 2020/01/12 22:43:58 by aait-ihi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ OBJ = $(SRCS:.c=.o)
 all : $(NAME)
 
 $(NAME) : $(OBJ) $(LIBFT)
-	$(CC) -g $(CFLAGS) $(OBJ) $(LIBFT) -ltermcap -o $(NAME)
+	$(CC) -g $(CFLAGS) $(OBJ) $(LIBFT)  -lreadline -ltermcap -o $(NAME)
 
 $(LIBFT) : libf
 

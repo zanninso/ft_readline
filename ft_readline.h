@@ -6,7 +6,7 @@
 /*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 12:55:33 by yabakhar          #+#    #+#             */
-/*   Updated: 2020/01/11 23:49:06 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2020/01/12 20:06:14 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,10 @@
 #include <sys/stat.h>
 #include "libft/includes/libft.h"
 #include <sys/ioctl.h>
+#define BUTTON_SELECT 40899
+#define BUTTON_COPY 40899
+#define BUTTON_CUT 40899
+#define BUTTON_PAST 40899
 #define BUTTON_PUP 2117425947
 #define BUTTON_PDOWN 2117491483
 #define BUTTON_UP 4283163

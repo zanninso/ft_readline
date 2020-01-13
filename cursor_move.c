@@ -6,7 +6,7 @@
 /*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/07 06:44:03 by aait-ihi          #+#    #+#             */
-/*   Updated: 2020/01/11 23:51:07 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2020/01/13 02:21:10 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,14 @@ void cur_move_by_word(t_readline *readline, int button)
 	tmp = NULL;
 	if (button == BUTTON_ALT_RIGHT)
 	{
-		tmp = (char *)ft_skip_unitl_char(line + readline->line_index, " '\";");
-		tmp = ft_skip_chars(tmp, " '\";");
+		tmp = (char *)ft_skip_unitl_char(line + readline->line_index, "\n '\";");
+		tmp = ft_skip_chars(tmp, "\n '\";");
 	}
 	else if (button == BUTTON_ALT_LEFT)
 	{
-		tmp = ft_rskip_chars(line, " '\";", readline->line_index - 1);
-		tmp = ft_rskip_unitl_char(line, " '\";", tmp - line);
-		if (ft_isinstr(*tmp, " '\";"))
+		tmp = ft_rskip_chars(line, "\n '\";", readline->line_index - 1);
+		tmp = ft_rskip_unitl_char(line, "\n '\";", tmp - line);
+		if (ft_isinstr(*tmp, "\n '\";"))
 			tmp++;
 	}
 	readline->line_index += tmp - &line[readline->line_index];
@@ -84,7 +84,8 @@ void cur_right(t_readline *readline)
 	t_line line_props;
 
 	line_props = readline->line_props;
-	if (readline->cursor + 1 >= line_props.details[line_props.index] && readline->line_props.index + 1 < readline->line_props.linecount)
+	if (readline->cursor + 1 >= line_props.details[line_props.index]
+			&& readline->line_props.index + 1 < readline->line_props.linecount)
 	{
 		readline->cursor = 0;
 		return (cur_down(readline));
