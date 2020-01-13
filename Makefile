@@ -6,7 +6,7 @@
 #    By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/12/07 00:56:57 by aait-ihi          #+#    #+#              #
-#    Updated: 2020/01/12 22:43:58 by aait-ihi         ###   ########.fr        #
+#    Updated: 2020/01/13 23:41:36 by aait-ihi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ CFLAGS = -Wall -Werror -Wextra -g
 
 CC = gcc
 
-SRCS = main.c cursor_helper.c cursor_move.c signal.c line_operation.c event.c cmd_history.c
+SRCS = main.c cursor_move.c cursor_move2.c cursor_helper.c helper.c  signal.c line_operation.c event.c cmd_history.c
 
 LIBFT = libft/libft.a
 

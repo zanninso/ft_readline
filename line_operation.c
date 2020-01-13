@@ -6,40 +6,11 @@
 /*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/12 22:57:02 by aait-ihi          #+#    #+#             */
-/*   Updated: 2020/01/12 23:56:12 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2020/01/13 23:47:35 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_readline.h"
-
-int get_virtua_line_count(t_readline *readline)
-{
-	int count;
-	int i;
-	const int *details = readline->line_props.details;
-
-	i = 0;
-	count = !!((details[i] + readline->o_cursor.x) % readline->col) + ((details[i] + readline->o_cursor.x) / readline->col);
-	i++;
-	while (i < readline->line_props.linecount)
-	{
-		count += !!(details[i] % readline->col) + (details[i] / readline->col);
-		i++;
-	}
-	return(count);
-}
-
-void update_o_cursor(t_readline *readline)
-{
-	int diff;
-
-	diff = (get_virtua_line_count(readline) + readline->o_cursor.y) - readline->row;
-	if (diff > 0)
-	{
-		readline->o_cursor.y -= diff;
-		set_virtual_origin(readline);
-	}
-}
 
 void rewrite_line(t_readline *readline)
 {
@@ -73,8 +44,12 @@ void insert_in_line(t_readline *readline, char *str)
 		free(line);
 		readline->cmd->tmp_line = new_line;
 		readline->cmd->tmp_len += i;
-		readline->line_props.details[readline->line_props.index] += i;
-		readline->cursor += i;
+		if (ft_strchr(str, '\n'))
+			readline->line_props.details = get_line_details(readline);
+		else 
+			readline->line_props.details[readline->line_props.index] += i;
+		readline->line_index += i;
+		set_cursor_from_index(readline);
 	}
 	rewrite_line(readline);
 }
@@ -100,11 +75,10 @@ void remove_from_line(t_readline *readline)
 			readline->line_props.details[readline->line_props.index]--;
 			if (c == '\n')
 			{
-				readline->line_props.index--;
-				readline->cursor = readline->line_props.details[readline->line_props.index];
 				readline->line_props.details = get_line_details(readline);
+				set_cursor_from_index(readline);
 			}
-			//else
+			else
 				readline->cursor--;
 		}
 	}

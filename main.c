@@ -6,12 +6,34 @@
 /*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/07 00:57:15 by aait-ihi          #+#    #+#             */
-/*   Updated: 2020/01/13 02:34:46 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2020/01/13 20:33:36 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_readline.h"
 #include <readline/readline.h>
+
+char *remove_unprintable_chars(char *str)
+{
+	char *ret;
+	int i;
+
+	ret = str;
+	i = 0;
+	if (str)
+	{
+		while (*str)
+		{
+			if (ft_isprint(*str) || *str == '\n')
+			{
+				ret[i++] = *str;
+			}
+			str++;
+		}
+		ret[i] = 0;
+	}
+	return(ret);
+}
 
 void init(t_readline *readline)
 {
@@ -71,7 +93,7 @@ int main()
 			else if (button == BUTTON_ENTER)
 				end_readline(&readline, 1);
 			else
-				insert_in_line(&readline, buff);
+				insert_in_line(&readline, remove_unprintable_chars(buff));
 		}
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/07 06:44:03 by aait-ihi          #+#    #+#             */
-/*   Updated: 2020/01/13 02:21:10 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2020/01/13 23:19:58 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void cur_move_by_word(t_readline *readline, int button)
 	tmp = NULL;
 	if (button == BUTTON_ALT_RIGHT)
 	{
-		tmp = (char *)ft_skip_unitl_char(line + readline->line_index, "\n '\";");
+		tmp = (char*)ft_skip_unitl_char(line + readline->line_index, "\n '\";");
 		tmp = ft_skip_chars(tmp, "\n '\";");
 	}
 	else if (button == BUTTON_ALT_LEFT)
@@ -84,42 +84,14 @@ void cur_right(t_readline *readline)
 	t_line line_props;
 
 	line_props = readline->line_props;
-	if (readline->cursor + 1 >= line_props.details[line_props.index]
-			&& readline->line_props.index + 1 < readline->line_props.linecount)
-	{
-		readline->cursor = 0;
-		return (cur_down(readline));
-	}
+	if (readline->cursor + 1 >= line_props.details[line_props.index])
+		if (readline->line_props.index + 1 < readline->line_props.linecount)
+		{
+			readline->cursor = 0;
+			return (cur_down(readline));
+		}
 	if (readline->cursor >= line_props.details[line_props.index])
 		return;
 	readline->cursor++;
 	cur_goto(readline, readline->cursor);
-}
-
-void to_start_or_end(t_readline *readline, int button)
-{
-	const int len = readline->line_props.details[readline->line_props.index];
-	const int count = readline->line_props.linecount;
-	int cursor;
-
-	if (button == BUTTON_HOME)
-	{
-		if (readline->cursor == 0 && readline->line_props.index > 0)
-		{
-			readline->line_props.index--;
-			set_virtual_origin(readline);
-		}
-		cursor = 0;
-	}
-	else
-	{
-		if (readline->cursor == len - 1 && readline->line_props.index < count - 1)
-		{
-			readline->line_props.index++;
-			set_virtual_origin(readline);
-		}
-		cursor = readline->line_props.details[readline->line_props.index];
-		cursor -= readline->line_props.index != count - 1;
-	}
-	cur_goto(readline, cursor);
 }
