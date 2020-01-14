@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cursor_helper.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aait-ihi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 14:44:38 by aait-ihi          #+#    #+#             */
-/*   Updated: 2020/01/13 23:43:31 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2020/01/14 09:44:33 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ void set_virtual_origin(t_readline *readline)
 		origin.y += (readline->line_props.details[i] % readline->col) > 0;
 		origin.x = 0;
 	}
-	readline->ov_cursor = origin;
+	readline->ov_cursor.x = origin.x;
+	readline->ov_cursor.y = origin.y;
 }
 
 void set_idnex_from_cursor(t_readline *readline)
@@ -83,7 +84,8 @@ void get_cursor_position(t_readline *readline)
 	while(1)
 	{
 		ft_putstr_fd("\e[6n", 0);
-		read(0, buff, 20);
+		col = read(0, buff, 20);
+		buff[col] = 0;
 		if(ft_strchr(buff,'['))
 			break;
 	}

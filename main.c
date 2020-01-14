@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aait-ihi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/07 00:57:15 by aait-ihi          #+#    #+#             */
-/*   Updated: 2020/01/13 20:33:36 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2020/01/14 11:02:26 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,7 @@ void init(t_readline *readline)
 	add_to_history(ft_strdup(""), 0);
 	readline->cmd = get_cmd_history_head();
 	readline->line_props.linecount = 1;
-	readline->line_props.details = malloc(sizeof(int));
-	readline->line_props.details[0] = 0;
+	readline->line_props.details = ft_memalloc(sizeof(int));
 }
 
 int main()
@@ -92,6 +91,8 @@ int main()
 				remove_from_line(&readline);
 			else if (button == BUTTON_ENTER)
 				end_readline(&readline, 1);
+			else if(BUTTON_SELECT == button)
+				selection(&readline);
 			else
 				insert_in_line(&readline, remove_unprintable_chars(buff));
 		}

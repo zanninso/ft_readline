@@ -1,0 +1,3 @@
+readline->line_props.details[readline->line_props.index] += i;
+		readline->line_index += i;
+		set_cursor_from_index(readline);

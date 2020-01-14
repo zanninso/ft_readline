@@ -1,0 +1,194 @@
+==6712== Memcheck, a memory error detector
+==6712== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==6712== Using Valgrind-3.15.0-608cb11914-20190413 and LibVEX; rerun with -h for copyright info
+==6712== Command: ./readline
+==6712== 
+--6712-- Valgrind options:
+--6712--    -v
+--6712-- Output from sysctl({CTL_KERN,KERN_VERSION}):
+--6712--   Darwin Kernel Version 17.0.0: Thu Aug 24 21:48:19 PDT 2017; root:xnu-4570.1.46~2/RELEASE_X86_64
+--6712-- Arch and hwcaps: AMD64, LittleEndian, amd64-cx16-rdtscp-sse3-ssse3-avx
+--6712-- Page sizes: currently 4096, max supported 4096
+--6712-- Valgrind library directory: /Users/aminyahia/brew/Cellar/valgrind/3.15.0/lib/valgrind
+--6712-- ./readline (rx at 0x100000000, rw at 0x100009000)
+--6712--    reading syms   from primary file (98 174)
+--6712--    dSYM= ./readline.dSYM/Contents/Resources/DWARF/readline
+--6712--    reading dwarf3 from dsyms file
+--6712-- /usr/lib/dyld (rx at 0x10000d000, rw at 0x100058000)
+--6712--    reading syms   from primary file (5 1485)
+--6712-- Scheduler: using generic scheduler lock implementation.
+--6712-- Reading suppressions file: /Users/aminyahia/brew/Cellar/valgrind/3.15.0/lib/valgrind/default.supp
+==6712== embedded gdbserver: reading from /var/folders/rr/_rtt356d6cddgjtjlhn5svz00000gn/T//vgdb-pipe-from-vgdb-to-6712-by-aminyahia-on-???
+==6712== embedded gdbserver: writing to   /var/folders/rr/_rtt356d6cddgjtjlhn5svz00000gn/T//vgdb-pipe-to-vgdb-from-6712-by-aminyahia-on-???
+==6712== embedded gdbserver: shared mem   /var/folders/rr/_rtt356d6cddgjtjlhn5svz00000gn/T//vgdb-pipe-shared-mem-vgdb-6712-by-aminyahia-on-???
+==6712== 
+==6712== TO CONTROL THIS PROCESS USING vgdb (which you probably
+==6712== don't want to do, unless you know exactly what you're doing,
+==6712== or are doing some strange experiment):
+==6712==   /Users/aminyahia/brew/Cellar/valgrind/3.15.0/lib/valgrind/../../bin/vgdb --pid=6712 ...command...
+==6712== 
+==6712== TO DEBUG THIS PROCESS USING GDB: start GDB like this
+==6712==   /path/to/gdb ./readline
+==6712== and then give GDB the following command
+==6712==   target remote | /Users/aminyahia/brew/Cellar/valgrind/3.15.0/lib/valgrind/../../bin/vgdb --pid=6712
+==6712== --pid is optional if only one valgrind process is running
+==6712== 
+--6712-- REDIR: 0x10003aa20 (dyld:strcmp) redirected to 0x258057de2 (???)
+--6712-- REDIR: 0x100034b0c (dyld:arc4random) redirected to 0x258057e80 (???)
+--6712-- REDIR: 0x1000349c0 (dyld:strlen) redirected to 0x258057db1 (???)
+--6712-- REDIR: 0x100034920 (dyld:strcpy) redirected to 0x258057dfe (???)
+--6712-- REDIR: 0x100038046 (dyld:strcat) redirected to 0x258057dc2 (???)
+--6712-- REDIR: 0x100038084 (dyld:strlcat) redirected to 0x258057e1b (???)
+--6712-- /Users/aminyahia/brew/Cellar/valgrind/3.15.0/lib/valgrind/vgpreload_core-amd64-darwin.so (rx at 0x1000ab000, rw at 0x1000b1000)
+--6712--    reading syms   from primary file (3 93)
+--6712--    dSYM= /Users/aminyahia/brew/Cellar/valgrind/3.15.0/lib/valgrind/vgpreload_core-amd64-darwin.so.dSYM/Contents/Resources/DWARF/vgpreload_core-amd64-darwin.so
+--6712-- /Users/aminyahia/brew/Cellar/valgrind/3.15.0/lib/valgrind/vgpreload_memcheck-amd64-darwin.so (rx at 0x1000b5000, rw at 0x1000bd000)
+--6712--    reading syms   from primary file (72 102)
+--6712--    dSYM= /Users/aminyahia/brew/Cellar/valgrind/3.15.0/lib/valgrind/vgpreload_memcheck-amd64-darwin.so.dSYM/Contents/Resources/DWARF/vgpreload_memcheck-amd64-darwin.so
+--6712-- /usr/lib/libncurses.5.4.dylib (rx at 0x1000c3000, rw at 0x1000f4000)
+--6712--    reading syms   from primary file (618 1)
+--6712-- /usr/lib/libSystem.B.dylib (rx at 0x100104000, rw at 0x100106000)
+--6712--    reading syms   from primary file (31 5)
+--6712-- /usr/lib/system/libcache.dylib (rx at 0x10010c000, rw at 0x100111000)
+--6712--    reading syms   from primary file (32 29)
+--6712-- /usr/lib/system/libcommonCrypto.dylib (rx at 0x100116000, rw at 0x100121000)
+--6712--    reading syms   from primary file (221 169)
+--6712-- /usr/lib/system/libcompiler_rt.dylib (rx at 0x10012e000, rw at 0x100136000)
+--6712--    reading syms   from primary file (510 8)
+--6712-- /usr/lib/system/libcopyfile.dylib (rx at 0x100143000, rw at 0x10014c000)
+--6712--    reading syms   from primary file (13 35)
+--6712-- /usr/lib/system/libcorecrypto.dylib (rx at 0x100152000, rw at 0x1001d7000)
+--6712--    reading syms   from primary file (511 669)
+--6712-- /usr/lib/system/libdispatch.dylib (rx at 0x1001f3000, rw at 0x10022d000)
+--6712--    reading syms   from primary file (270 943)
+--6712-- /usr/lib/system/libdyld.dylib (rx at 0x100267000, rw at 0x100285000)
+--6712--    reading syms   from primary file (97 992)
+--6712-- /usr/lib/system/libkeymgr.dylib (rx at 0x10029f000, rw at 0x1002a0000)
+--6712--    reading syms   from primary file (12 3)
+--6712-- /usr/lib/system/libmacho.dylib (rx at 0x1002ab000, rw at 0x1002b0000)
+--6712--    reading syms   from primary file (105 1)
+--6712-- /usr/lib/system/libquarantine.dylib (rx at 0x1002b6000, rw at 0x1002b9000)
+--6712--    reading syms   from primary file (67 32)
+--6712-- /usr/lib/system/libremovefile.dylib (rx at 0x1002bf000, rw at 0x1002c1000)
+--6712--    reading syms   from primary file (15 4)
+--6712-- /usr/lib/system/libsystem_asl.dylib (rx at 0x1002c6000, rw at 0x1002de000)
+--6712--    reading syms   from primary file (222 225)
+--6712-- /usr/lib/system/libsystem_blocks.dylib (rx at 0x1002eb000, rw at 0x1002ec000)
+--6712--    reading syms   from primary file (21 6)
+--6712-- /usr/lib/system/libsystem_c.dylib (rx at 0x1002f0000, rw at 0x10037a000)
+--6712--    reading syms   from primary file (1340 804)
+--6712-- /usr/lib/system/libsystem_configuration.dylib (rx at 0x1003a2000, rw at 0x1003a6000)
+--6712--    reading syms   from primary file (38 66)
+--6712-- /usr/lib/system/libsystem_coreservices.dylib (rx at 0x1003ac000, rw at 0x1003b0000)
+--6712--    reading syms   from primary file (14 37)
+--6712-- /usr/lib/system/libsystem_darwin.dylib (rx at 0x1003b5000, rw at 0x1003b7000)
+--6712--    reading syms   from primary file (12 105)
+--6712-- /usr/lib/system/libsystem_dnssd.dylib (rx at 0x1003bc000, rw at 0x1003c3000)
+--6712--    reading syms   from primary file (49 24)
+--6712-- /usr/lib/system/libsystem_info.dylib (rx at 0x1003c9000, rw at 0x100413000)
+--6712--    reading syms   from primary file (525 650)
+--6712-- /usr/lib/system/libsystem_m.dylib (rx at 0x10042a000, rw at 0x100476000)
+--6712--    reading syms   from primary file (805 1)
+--6712-- /usr/lib/system/libsystem_malloc.dylib (rx at 0x100484000, rw at 0x1004a4000)
+--6712--    reading syms   from primary file (127 265)
+--6712-- /usr/lib/system/libsystem_network.dylib (rx at 0x1004b0000, rw at 0x100554000)
+--6712--    reading syms   from primary file (1097 1084)
+--6712-- /usr/lib/system/libsystem_networkextension.dylib (rx at 0x10058d000, rw at 0x100598000)
+--6712--    reading syms   from primary file (96 229)
+--6712-- /usr/lib/system/libsystem_notify.dylib (rx at 0x1005a4000, rw at 0x1005ae000)
+--6712--    reading syms   from primary file (113 54)
+--6712-- /usr/lib/system/libsystem_sandbox.dylib (rx at 0x1005b5000, rw at 0x1005b9000)
+--6712--    reading syms   from primary file (95 9)
+--6712-- /usr/lib/system/libsystem_secinit.dylib (rx at 0x1005bf000, rw at 0x1005c1000)
+--6712--    reading syms   from primary file (1 7)
+--6712-- /usr/lib/system/libsystem_kernel.dylib (rx at 0x1005c6000, rw at 0x1005ec000)
+--6712--    reading syms   from primary file (1260 100)
+--6712-- /usr/lib/system/libsystem_platform.dylib (rx at 0x100605000, rw at 0x10060d000)
+--6712--    reading syms   from primary file (157 101)
+--6712-- /usr/lib/system/libsystem_pthread.dylib (rx at 0x100615000, rw at 0x100621000)
+--6712--    reading syms   from primary file (177 75)
+--6712-- /usr/lib/system/libsystem_symptoms.dylib (rx at 0x10062d000, rw at 0x100635000)
+--6712--    reading syms   from primary file (10 93)
+--6712-- /usr/lib/system/libsystem_trace.dylib (rx at 0x10063b000, rw at 0x10064f000)
+--6712--    reading syms   from primary file (114 246)
+--6712-- /usr/lib/system/libunwind.dylib (rx at 0x10065d000, rw at 0x100663000)
+--6712--    reading syms   from primary file (102 52)
+--6712-- /usr/lib/system/libxpc.dylib (rx at 0x10066a000, rw at 0x100696000)
+--6712--    reading syms   from primary file (561 893)
+--6712-- /usr/lib/closure/libclosured.dylib (rx at 0x1006b8000, rw at 0x1006ec000)
+--6712--    reading syms   from primary file (1 966)
+--6712-- /usr/lib/libobjc.A.dylib (rx at 0x100707000, rw at 0x100af9000)
+--6712--    reading syms   from primary file (369 902)
+--6712-- /usr/lib/libc++abi.dylib (rx at 0x100ca9000, rw at 0x100cce000)
+--6712--    reading syms   from primary file (369 212)
+--6712-- /usr/lib/libc++.1.dylib (rx at 0x100cdd000, rw at 0x100d34000)
+--6712--    reading syms   from primary file (2023 1681)
+--6712-- REDIR: 0x100605ba0 (libsystem_platform.dylib:_platform_memcmp) redirected to 0x1000b82b4 (_platform_memcmp)
+--6712-- REDIR: 0x1006060e0 (libsystem_platform.dylib:_platform_strncmp) redirected to 0x1000b7acc (_platform_strncmp)
+--6712-- REDIR: 0x1002f1440 (libsystem_c.dylib:strlen) redirected to 0x1000b775b (strlen)
+--6712-- REDIR: 0x1006066a0 (libsystem_platform.dylib:_platform_strcmp) redirected to 0x1000b7b46 (_platform_strcmp)
+--6712-- REDIR: 0x1004885b8 (libsystem_malloc.dylib:calloc) redirected to 0x1000b662f (calloc)
+--6712-- REDIR: 0x100487c60 (libsystem_malloc.dylib:malloc_default_zone) redirected to 0x1000b736c (malloc_default_zone)
+--6712-- REDIR: 0x10048619a (libsystem_malloc.dylib:malloc_zone_malloc) redirected to 0x1000b627b (malloc_zone_malloc)
+--6712-- REDIR: 0x100487c69 (libsystem_malloc.dylib:malloc_zone_calloc) redirected to 0x1000b681d (malloc_zone_calloc)
+--6712-- REDIR: 0x1004854f3 (libsystem_malloc.dylib:malloc) redirected to 0x1000b6010 (malloc)
+--6712-- REDIR: 0x1006063c0 (libsystem_platform.dylib:_platform_memmove$VARIANT$Ivybridge) redirected to 0x1000b89d6 (_platform_memmove$VARIANT$Ivybridge)
+--6712-- REDIR: 0x100487d31 (libsystem_malloc.dylib:malloc_zone_from_ptr) redirected to 0x1000b73ad (malloc_zone_from_ptr)
+--6712-- REDIR: 0x10048765d (libsystem_malloc.dylib:free) redirected to 0x1000b63f1 (free)
+--6712-- REDIR: 0x10048876f (libsystem_malloc.dylib:realloc) redirected to 0x1000b69b1 (realloc)
+--6712-- REDIR: 0x10034ab51 (libsystem_c.dylib:strrchr) redirected to 0x1000b75b9 (strrchr)
+--6712-- REDIR: 0x1002f14a0 (libsystem_c.dylib:strncpy) redirected to 0x1000b78d8 (strncpy)
+==6712== Conditional jump or move depends on uninitialised value(s)
+==6712==    at 0x1000063D6: ft_itoa_base (in ./readline)
+==6712==    by 0x1000063A9: ft_itoa (in ./readline)
+==6712==    by 0x100006729: dispatcher (in ./readline)
+==6712==    by 0x100006E77: print_fmt (in ./readline)
+==6712==    by 0x100007095: ft_printf (in ./readline)
+==6712==    by 0x1000012A6: cur_goto (cursor_move2.c:54)
+==6712==    by 0x1000018E9: rewrite_line (line_operation.c:23)
+==6712==    by 0x100001A6E: insert_in_line (line_operation.c:55)
+==6712==    by 0x100000D3B: main (main.c:95)
+==6712== 
+==6712== Conditional jump or move depends on uninitialised value(s)
+==6712==    at 0x100006537: declen_base (in ./readline)
+==6712==    by 0x10000640B: ft_itoa_base (in ./readline)
+==6712==    by 0x1000063A9: ft_itoa (in ./readline)
+==6712==    by 0x100006729: dispatcher (in ./readline)
+==6712==    by 0x100006E77: print_fmt (in ./readline)
+==6712==    by 0x100007095: ft_printf (in ./readline)
+==6712==    by 0x1000012A6: cur_goto (cursor_move2.c:54)
+==6712==    by 0x1000018E9: rewrite_line (line_operation.c:23)
+==6712==    by 0x100001A6E: insert_in_line (line_operation.c:55)
+==6712==    by 0x100000D3B: main (main.c:95)
+==6712== 
+==6712== Conditional jump or move depends on uninitialised value(s)
+==6712==    at 0x100006483: ft_itoa_base (in ./readline)
+==6712==    by 0x1000063A9: ft_itoa (in ./readline)
+==6712==    by 0x100006729: dispatcher (in ./readline)
+==6712==    by 0x100006E77: print_fmt (in ./readline)
+==6712==    by 0x100007095: ft_printf (in ./readline)
+==6712==    by 0x1000012A6: cur_goto (cursor_move2.c:54)
+==6712==    by 0x1000018E9: rewrite_line (line_operation.c:23)
+==6712==    by 0x100001A6E: insert_in_line (line_operation.c:55)
+==6712==    by 0x100000D3B: main (main.c:95)
+==6712== 
+==6712== Use of uninitialised value of size 8
+==6712==    at 0x1000064BC: ft_itoa_base (in ./readline)
+==6712==    by 0x1000063A9: ft_itoa (in ./readline)
+==6712==    by 0x100006729: dispatcher (in ./readline)
+==6712==    by 0x100006E77: print_fmt (in ./readline)
+==6712==    by 0x100007095: ft_printf (in ./readline)
+==6712==    by 0x1000012A6: cur_goto (cursor_move2.c:54)
+==6712==    by 0x1000018E9: rewrite_line (line_operation.c:23)
+==6712==    by 0x100001A6E: insert_in_line (line_operation.c:55)
+==6712==    by 0x100000D3B: main (main.c:95)
+==6712== 
+==6712== Conditional jump or move depends on uninitialised value(s)
+==6712==    at 0x100001945: insert_in_line (line_operation.c:35)
+==6712==    by 0x100000D3B: main (main.c:95)
+==6712== 
+==6712== Conditional jump or move depends on uninitialised value(s)
+==6712==    at 0x1000013E8: set_cursor_from_index (cursor_helper.c:56)
+==6712==    by 0x100001A65: insert_in_line (line_operation.c:53)
+==6712==    by 0x100000D3B: main (main.c:95)
+==6712== 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aait-ihi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/07 13:19:03 by aait-ihi          #+#    #+#             */
-/*   Updated: 2019/12/11 03:20:15 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2020/01/14 09:02:03 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void		signal_resize(int sig)
 	struct winsize	wn;
 
 	(void)sig;
-	ioctl(0, TIOCGWINSZ, &wn);
+	ioctl(1, TIOCGWINSZ, &wn);
 	g_readline->col = wn.ws_col;
 	g_readline->row = wn.ws_row;
 }

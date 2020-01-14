@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   line_operation.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aait-ihi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/12 22:57:02 by aait-ihi          #+#    #+#             */
-/*   Updated: 2020/01/13 23:47:35 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2020/01/14 09:34:37 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void rewrite_line(t_readline *readline)
 {
-	update_o_cursor(readline);
-	tputs(tgoto(tgetstr("cm", 0), 0, readline->o_cursor.y), 0, output);
+	//update_o_cursor(readline);
+	tputs(tgoto(tgetstr("cm", 0), 0,readline->o_cursor.y), 0, output);
 	tputs(tgetstr("cd", NULL), 0, output);
 	ft_printf("➜  ft_readline git:(master) ");
 	ft_putstr(readline->cmd->tmp_line);
@@ -31,6 +31,7 @@ void insert_in_line(t_readline *readline, char *str)
 	const int i = ft_strlen(str);
 
 	line = readline->cmd->tmp_line;
+	new_line = NULL;
 	if (readline->cmd->tmp_len == readline->line_index)
 		new_line = ft_strjoin(line, str);
 	else

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_readline.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aait-ihi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 12:55:33 by yabakhar          #+#    #+#             */
-/*   Updated: 2020/01/13 23:37:05 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2020/01/14 10:59:53 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ typedef struct s_readline
 	t_line line_props;
 	t_point o_cursor;
 	t_point ov_cursor;
+	char *to_past;
 	int cursor;
 	int line_index;
 	int col;
@@ -140,5 +141,7 @@ t_cmd_history *get_cmd_history_head(void);
 void set_signal(void);
 void signal_resize(int sig);
 void sig_dispatch(int a);
+
+void selection(t_readline *readline);
 
 #endif
