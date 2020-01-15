@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/07 00:57:15 by aait-ihi          #+#    #+#             */
-/*   Updated: 2020/01/14 11:02:26 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2020/01/14 23:38:47 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,6 @@ void init(t_readline *readline)
 	if (tcgetattr(0, &readline->config) < 0)
 		puts("error");
 	readline->config.c_lflag &= ~(ECHO | ICANON);
-    readline->config.c_cc[VMIN] = 1;
-    readline->config.c_cc[VTIME] = 0;
 	if (tcsetattr(0, 0, &readline->config) < 0)
 		puts("error");
 	tgetent(NULL, getenv("TERM"));

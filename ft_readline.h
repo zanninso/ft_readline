@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_readline.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 12:55:33 by yabakhar          #+#    #+#             */
-/*   Updated: 2020/01/14 10:59:53 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2020/01/15 03:22:47 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,11 @@
 # include "libft/includes/libft.h"
 # include <sys/ioctl.h>
 # include "define.h"
+# define BUTTON_ESC 27
 # define BUTTON_SELECT 40899
-# define BUTTON_COPY 40899
-# define BUTTON_CUT 40899
-# define BUTTON_PAST 40899
+# define BUTTON_COPY 42947
+# define BUTTON_CUT 8948194
+# define BUTTON_PAST 10127586
 # define BUTTON_PUP 2117425947
 # define BUTTON_PDOWN 2117491483
 # define BUTTON_UP 4283163
