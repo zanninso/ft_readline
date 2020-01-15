@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aait-ihi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/07 00:57:15 by aait-ihi          #+#    #+#             */
-/*   Updated: 2020/01/14 23:38:47 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2020/01/15 05:00:19 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void init(t_readline *readline)
 int main()
 {
 	t_readline readline;
-	char buff[5];
+	char buff[2049];
 	int r;
 	int button;
 	// int fd = open("/dev/ttys002", O_WRONLY);
@@ -65,8 +65,8 @@ int main()
 	init(&readline);
 	while (1)
 	{
-		ft_bzero(buff, 5);
-		if ((r = read(0, buff, 4)) > 0)
+		ft_bzero(buff, 2049);
+		if ((r = read(0, buff, 2048)) > 0)
 		{
 			// ft_putnbr_fd(((int *)buff)[0], fd);
 			// ft_putstr_fd("   ", fd);
@@ -86,11 +86,13 @@ int main()
 			else if (button == BUTTON_ALT_RIGHT || button == BUTTON_ALT_LEFT)
 				cur_move_by_word(&readline, button);
 			else if (button == BUTTON_DEL || button == BUTTON_DEL2)
-				remove_from_line(&readline);
+				remove_from_line(&readline, readline.line_index - 1, readline.line_index);
 			else if (button == BUTTON_ENTER)
 				end_readline(&readline, 1);
 			else if(BUTTON_SELECT == button)
 				selection(&readline);
+			else if (BUTTON_PAST == button && readline.to_past)
+				insert_in_line(&readline, remove_unprintable_chars(readline.to_past));
 			else
 				insert_in_line(&readline, remove_unprintable_chars(buff));
 		}

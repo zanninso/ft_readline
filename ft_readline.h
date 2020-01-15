@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_readline.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aait-ihi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 12:55:33 by yabakhar          #+#    #+#             */
-/*   Updated: 2020/01/15 03:22:47 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2020/01/15 05:00:43 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ void configure_terminal(t_readline *readline);
 **	Line Operations
 */
 void	insert_in_line(t_readline *readline, char *str);
-void	remove_from_line(t_readline *readline);
+void	remove_from_line(t_readline *readline, int start, int end);
 void	rewrite_line(t_readline *readline);
 int		*get_line_details(t_readline *readline);
 

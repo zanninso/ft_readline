@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   line_operation.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aait-ihi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/12 22:57:02 by aait-ihi          #+#    #+#             */
-/*   Updated: 2020/01/15 01:44:09 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2020/01/15 05:07:56 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,41 +39,38 @@ void insert_in_line(t_readline *readline, char *str)
 		free(line);
 		readline->cmd->tmp_line = new_line;
 		readline->cmd->tmp_len += i;
+		readline->line_index += i;
 		readline->line_props.details[readline->line_props.index] += i;
 		if (ft_strchr(str, '\n'))
 			readline->line_props.details = get_line_details(readline);
-		readline->line_index += i;
 		set_cursor_from_index(readline);
 	}
 	rewrite_line(readline);
 }
 
-void remove_from_line(t_readline *readline)
+void remove_from_line(t_readline *readline, int start, int end)
 {
 	char *new_line;
 	char *line;
-	char c;
+	int is_line;
+	const int len = end - start;
 
 	line = readline->cmd->tmp_line;
-	if (readline->line_index > 0)
+	if (start >= 0)
 	{
-		c = line[readline->line_index - 1];
-		line[readline->line_index - 1] = 0;
-		new_line = ft_strjoin(line, line + readline->line_index);
+		is_line = !!ft_strnstr(&line[start], "\n", len);
+		line[start] = 0;
+		new_line = ft_strjoin(line, line + end);
 		if (new_line)
 		{
 			free(line);
 			readline->cmd->tmp_line = new_line;
-			readline->cmd->tmp_len--;
-			readline->line_index--;
-			readline->line_props.details[readline->line_props.index]--;
-			if (c == '\n')
-			{
+			readline->cmd->tmp_len -= len;
+			readline->line_index -= len;
+			readline->line_props.details[readline->line_props.index] -= len;
+			if (is_line == '\n')
 				readline->line_props.details = get_line_details(readline);
-				set_cursor_from_index(readline);
-			}
-			else
-				readline->cursor--;
+			set_cursor_from_index(readline);
 		}
 	}
 	rewrite_line(readline);
