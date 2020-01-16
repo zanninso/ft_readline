@@ -6,61 +6,61 @@
 /*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/14 08:55:45 by aait-ihi          #+#    #+#             */
-/*   Updated: 2020/01/13 23:51:37 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2020/01/16 00:44:18 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_readline.h"
 
-static t_cmd_history *history_list = NULL;
+static	t_cmd_history *g_history_list = NULL;
 
-t_cmd_history *get_cmd_history_head(void)
+t_cmd_history	*get_cmd_history_head(void)
 {
-	return (history_list);
+	return (g_history_list);
 }
 
-void add_to_history(char *str, int len)
+void			add_to_history(char *str, int len)
 {
-	t_cmd_history *tmp;
+	t_cmd_history	*tmp;
 
 	if (!str)
-		return;
+		return ;
 	if ((tmp = ft_memalloc(sizeof(t_cmd_history))))
 	{
-		if (history_list)
-			history_list->prev = tmp;
-		tmp->next = history_list;
+		if (g_history_list)
+			g_history_list->prev = tmp;
+		tmp->next = g_history_list;
 		tmp->line = str;
 		tmp->tmp_line = ft_strdup(str);
 		tmp->len = len;
 		tmp->tmp_len = len;
-		history_list = tmp;
+		g_history_list = tmp;
 	}
 }
 
-void free_history(void)
+void			free_history(void)
 {
-	t_cmd_history *next;
+	t_cmd_history	*next;
 
-	while (history_list)
+	while (g_history_list)
 	{
-		next = history_list->next;
-		if (*history_list->line)
+		next = g_history_list->next;
+		if (*g_history_list->line)
 		{
-			ft_bzero(history_list->line, history_list->len);
-			free(history_list->line);
+			ft_bzero(g_history_list->line, g_history_list->len);
+			free(g_history_list->line);
 		}
-		free(history_list);
-		history_list = next;
+		free(g_history_list);
+		g_history_list = next;
 	}
 }
 
-void clean_hsitory()
+void			clean_hsitory(void)
 {
-	t_cmd_history **next;
-	t_cmd_history *to_free;
+	t_cmd_history	**next;
+	t_cmd_history	*to_free;
 
-	next = &history_list;
+	next = &g_history_list;
 	while (*next)
 	{
 		if (!(*next)->line || !*(*next)->line)
@@ -74,30 +74,30 @@ void clean_hsitory()
 			continue;
 		}
 		else
-			break;
+			break ;
 		next = &(*next)->next;
 	}
 }
 
-void move_in_history(t_readline *readline, int button)
+void			set_cur_history(t_readline *readline, t_cmd_history *cur)
 {
-	char *new_line;
-	//const int cursor = readline->o_cursor;
+	char	*new_line;
 
-	if (button == BUTTON_UP && readline->cmd->next)
-		readline->cmd = readline->cmd->next;
-	else if (button == BUTTON_DOWN && readline->cmd->prev)
-		readline->cmd = readline->cmd->prev;
+	new_line = NULL;
+	if (!cur)
+		return ;
+	if (ft_strequ(readline->cmd->line, readline->cmd->tmp_line))
+		ft_strdel(&readline->cmd->tmp_line);
+	readline->cmd = cur;
 	if (!readline->cmd->tmp_line)
 		if ((new_line = ft_strdup(readline->cmd->line)))
-		{
-			readline->cmd->tmp_line = new_line;
-			readline->cmd->tmp_len = readline->cmd->len;
 			readline->line_props.details = get_line_details(readline);
-		}
-	rewrite_line(readline);
-	readline->ov_cursor = readline->o_cursor;
-	readline->line_index = readline->cmd->tmp_len;
-	set_cursor_from_index(readline);
-	cur_goto(readline, readline->cursor);
+	if (new_line && readline->line_props.details)
+	{
+		readline->cmd->tmp_line = new_line;
+		readline->cmd->tmp_len = readline->cmd->len;
+		readline->line_index = readline->cmd->tmp_len;
+		set_cursor_from_index(readline);
+		rewrite_line(readline);
+	}
 }

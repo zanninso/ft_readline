@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_readline.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 12:55:33 by yabakhar          #+#    #+#             */
-/*   Updated: 2020/01/15 05:00:43 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2020/01/16 01:23:26 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@
 # include <sys/stat.h>
 # include "libft/includes/libft.h"
 # include <sys/ioctl.h>
-# include "define.h"
 # define BUTTON_ESC 27
 # define BUTTON_SELECT 40899
 # define BUTTON_COPY 42947
@@ -81,8 +80,6 @@ typedef struct s_readline
 	int line_index;
 	int col;
 	int row;
-	int win_col;
-	int win_row;
 } t_readline;
 
 t_readline *g_readline;
@@ -136,7 +133,8 @@ int		*get_line_details(t_readline *readline);
 void clean_hsitory(void);
 void add_to_history(char *str, int len);
 void free_history(void);
-void move_in_history(t_readline *readline, int button);
+void set_cur_history(t_readline *readline, t_cmd_history *cur);
+// void move_in_history(t_readline *readline, int button);
 t_cmd_history *get_cmd_history_head(void);
 
 void set_signal(void);

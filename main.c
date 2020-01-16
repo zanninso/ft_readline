@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/07 00:57:15 by aait-ihi          #+#    #+#             */
-/*   Updated: 2020/01/15 05:00:19 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2020/01/16 01:20:06 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,36 @@ char *remove_unprintable_chars(char *str)
 		}
 		ret[i] = 0;
 	}
-	return(ret);
+	return (ret);
+}
+
+int key_handel(t_readline *env, int b)
+{
+	if (b == BUTTON_UP && !(b = 0))
+		set_cur_history(env, env->cmd->next);
+	else if (b == BUTTON_DOWN && !(b = 0))
+		set_cur_history(env, env->cmd->prev);
+	else if (b == BUTTON_RIGHT && !(b = 0))
+		cur_right(env);
+	else if (b == BUTTON_LEFT && !(b = 0))
+		cur_left(env);
+	else if (b == BUTTON_PUP && !(b = 0))
+		cur_up(env);
+	else if (b == BUTTON_PDOWN && !(b = 0))
+		cur_down(env);
+	else if ((b == BUTTON_HOME || b == BUTTON_END) && !(b = 0))
+		to_start_or_end(env, b);
+	else if ((b == BUTTON_ALT_RIGHT || b == BUTTON_ALT_LEFT) && !(b = 0))
+		cur_move_by_word(env, b);
+	else if ((b == BUTTON_DEL || b == BUTTON_DEL2) && !(b = 0))
+		remove_from_line(env, env->line_index - 1, env->line_index);
+	else if (b == BUTTON_ENTER && !(b = 0))
+		end_readline(env, 1);
+	else if (b == BUTTON_SELECT && !(b = 0))
+		selection(env);
+	else if (b == BUTTON_PAST && !(b = 0))
+		insert_in_line(env, remove_unprintable_chars(env->to_past));
+	return (b);
 }
 
 void init(t_readline *readline)
@@ -53,6 +82,47 @@ void init(t_readline *readline)
 	readline->line_props.details = ft_memalloc(sizeof(int));
 }
 
+
+void end_readline(t_readline *readline, int suit)
+{
+	t_cmd_history *head;
+	char *tmp;
+
+	head = get_cmd_history_head();
+	if (suit && head->next)
+	{
+		tmp = ft_strnjoin((char *[]){head->next->line, "\n", readline->cmd->tmp_line}, 3);
+		ft_strdel(&head->line);
+		free(readline->cmd->tmp_line);
+		readline->cmd->tmp_line = tmp;
+		readline->cmd->tmp_len = head->next->len + readline->cmd->tmp_len + 1;
+		head = head->next;
+	}
+	head->line = readline->cmd->tmp_line;
+	head->len = readline->cmd->tmp_len;
+	readline->cmd->tmp_line = NULL;
+	ft_strdel(&head->tmp_line);
+	clean_hsitory();
+	ft_printf("\n➜  ft_readline git:(master) ");
+	init(readline);
+}
+
+int everything_is_ok(t_readline *readline)
+{
+	int ret;
+
+	ret = 1;
+	ret &= (readline->cmd && readline->cmd->tmp_line);
+	ret &= (readline->line_props.details != NULL);
+	if(ret)
+	{
+		readline->line_index %= readline->cmd->tmp_len + 1;
+		readline->line_props.index %= readline->line_props.linecount;
+		readline->cursor %= readline->line_props.details[readline->line_props.index] + 1;
+	}
+	return(ret);
+}
+
 int main()
 {
 	t_readline readline;
@@ -63,7 +133,7 @@ int main()
 
 	ft_printf("➜  ft_readline git:(master) ");
 	init(&readline);
-	while (1)
+	while (everything_is_ok(&readline))
 	{
 		ft_bzero(buff, 2049);
 		if ((r = read(0, buff, 2048)) > 0)
@@ -71,30 +141,9 @@ int main()
 			// ft_putnbr_fd(((int *)buff)[0], fd);
 			// ft_putstr_fd("   ", fd);
 			button = *((int *)buff);
-			if (button == BUTTON_UP || button == BUTTON_DOWN)
-				move_in_history(&readline, button);
-			else if (button == BUTTON_RIGHT)
-				cur_right(&readline);
-			else if (button == BUTTON_LEFT)
-				cur_left(&readline);
-			else if (button == BUTTON_PUP)
-				cur_up(&readline);
-			else if (button == BUTTON_PDOWN)
-				cur_down(&readline);
-			else if (button == BUTTON_HOME || button == BUTTON_END)
-				to_start_or_end(&readline, button);
-			else if (button == BUTTON_ALT_RIGHT || button == BUTTON_ALT_LEFT)
-				cur_move_by_word(&readline, button);
-			else if (button == BUTTON_DEL || button == BUTTON_DEL2)
-				remove_from_line(&readline, readline.line_index - 1, readline.line_index);
-			else if (button == BUTTON_ENTER)
-				end_readline(&readline, 1);
-			else if(BUTTON_SELECT == button)
-				selection(&readline);
-			else if (BUTTON_PAST == button && readline.to_past)
-				insert_in_line(&readline, remove_unprintable_chars(readline.to_past));
-			else
+			if (key_handel(&readline, button))
 				insert_in_line(&readline, remove_unprintable_chars(buff));
 		}
 	}
+	// end_readline(&readline, 0);
 }

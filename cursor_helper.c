@@ -6,16 +6,16 @@
 /*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 14:44:38 by aait-ihi          #+#    #+#             */
-/*   Updated: 2020/01/15 00:11:54 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2020/01/16 01:35:00 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_readline.h"
 
-void set_virtual_origin(t_readline *readline)
+void	set_virtual_origin(t_readline *readline)
 {
-	int i;
-	t_point origin;
+	int		i;
+	t_point	origin;
 
 	origin = readline->o_cursor;
 	i = readline->line_props.index;
@@ -29,42 +29,42 @@ void set_virtual_origin(t_readline *readline)
 	readline->ov_cursor = origin;
 }
 
-void set_idnex_from_cursor(t_readline *readline)
+void	set_idnex_from_cursor(t_readline *readline)
 {
-	int index;
-	int i;
+	int		index;
+	int		i;
 
 	i = readline->line_props.index;
 	index = readline->cursor;
 	while (i)
 	{
 		i--;
-		index += readline->line_props.details[i];	
+		index += readline->line_props.details[i];
 	}
 	readline->line_index = index;
 }
 
-void set_cursor_from_index(t_readline *readline)
+void	set_cursor_from_index(t_readline *readline)
 {
-	int index;
-	int i;
-	const int *details = readline->line_props.details;
+	int			index;
+	int			i;
+	const int	*details = readline->line_props.details;
 
 	i = 0;
 	index = 0;
-	if(readline->cmd->tmp_len == readline->line_index)
+	if (readline->cmd->tmp_len == readline->line_index)
 	{
 		readline->line_props.index = readline->line_props.linecount - 1;
 		readline->cursor = details[readline->line_props.index];
 		set_virtual_origin(readline);
-		return;
+		return ;
 	}
 	while (1)
 	{
 		if (i >= readline->line_props.linecount)
-			break;
+			break ;
 		if (BETWEEN(readline->line_index, index, index + details[i] - 1))
-			break;
+			break ;
 		index += readline->line_props.details[i];
 		i++;
 	}
@@ -73,20 +73,20 @@ void set_cursor_from_index(t_readline *readline)
 	set_virtual_origin(readline);
 }
 
-void get_cursor_position(t_readline *readline)
+void	get_cursor_position(t_readline *readline)
 {
-	char *buff;
-	int col;
-	int row;
+	char	*buff;
+	int		col;
+	int		row;
 
 	buff = (char[21]){0};
-	while(1)
+	while (1)
 	{
 		ft_putstr_fd("\e[6n", 0);
 		col = read(0, buff, 20);
 		buff[col] = 0;
-		if(ft_strchr(buff,'['))
-			break;
+		if (ft_strchr(buff, '['))
+			break ;
 	}
 	buff = (char *)ft_skip_unitl_char(buff, "[");
 	row = ft_atoi(buff + 1);
@@ -95,16 +95,3 @@ void get_cursor_position(t_readline *readline)
 	readline->o_cursor = (t_point){col - 1, row - 1};
 	readline->ov_cursor = readline->o_cursor;
 }
-
-// void	configure_terminal(t_ft_select *ft_select)
-// {
-// 	if (tcgetattr(0, &ft_select->config) < 0)
-// 		ft_die(ERR_TERM_GET_ARG, -2);
-// 	ft_select->config.c_lflag &= ~(ECHO | ICANON);
-// 	if (tcsetattr(0, 0, &ft_select->config) < 0)
-// 		ft_die(ERR_TERM_SET_ARG, -3);
-// 	if (tgetent(NULL, getenv("TERM")) <= 0)
-// 		ft_die(ERR_TERM_INIT, -4);
-// 	tputs(tgetstr("ti", 0), 0, output);
-// 	tputs(tgetstr("vi", 0), 0, output);
-// }

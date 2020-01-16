@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   line_operation.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/12 22:57:02 by aait-ihi          #+#    #+#             */
-/*   Updated: 2020/01/15 05:07:56 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2020/01/16 01:49:12 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_readline.h"
 
-void rewrite_line(t_readline *readline)
+void		rewrite_line(t_readline *readline)
 {
 	update_o_cursor(readline);
-	tputs(tgoto(tgetstr("cm", 0), 0,readline->o_cursor.y), 0, output);
+	tputs(tgoto(tgetstr("cm", 0), 0, readline->o_cursor.y), 0, output);
 	tputs(tgetstr("cd", NULL), 0, output);
 	ft_printf("➜  ft_readline git:(master) ");
 	ft_putstr(readline->cmd->tmp_line);
@@ -23,66 +23,64 @@ void rewrite_line(t_readline *readline)
 	cur_goto(readline, readline->cursor);
 }
 
-void insert_in_line(t_readline *readline, char *str)
+static void	put_new_line(t_readline *readline, char *new_line,
+														int is_line, int len)
 {
-	char *new_line;
-	char *line;
-	const int i = ft_strlen(str);
-	
-	line = readline->cmd->tmp_line;
-	new_line = ft_strnew(readline->cmd->tmp_len + i);
-	ft_strncpy(new_line, line, readline->line_index);
-	ft_strcat(new_line, str);
-	ft_strcat(new_line, line + readline->line_index);
-	if (new_line)
+	free(readline->cmd->tmp_line);
+	readline->cmd->tmp_line = new_line;
+	readline->cmd->tmp_len += len;
+	readline->line_index += len;
+	readline->line_props.details[readline->line_props.index] += len;
+	if (is_line)
+		readline->line_props.details = get_line_details(readline);
+	if (readline->line_props.details)
 	{
-		free(line);
-		readline->cmd->tmp_line = new_line;
-		readline->cmd->tmp_len += i;
-		readline->line_index += i;
-		readline->line_props.details[readline->line_props.index] += i;
-		if (ft_strchr(str, '\n'))
-			readline->line_props.details = get_line_details(readline);
 		set_cursor_from_index(readline);
+		rewrite_line(readline);
 	}
-	rewrite_line(readline);
 }
 
-void remove_from_line(t_readline *readline, int start, int end)
+void		insert_in_line(t_readline *readline, char *str)
 {
-	char *new_line;
-	char *line;
-	int is_line;
-	const int len = end - start;
+	char		*new_line;
+	const int	is_line = !!ft_strchr(str, '\n');
+	const int	len = ft_strlen(str);
 
-	line = readline->cmd->tmp_line;
+	if (str)
+	{
+		new_line = ft_strnew(readline->cmd->tmp_len + len);
+		ft_strncpy(new_line, readline->cmd->tmp_line, readline->line_index);
+		ft_strcat(new_line, str);
+		ft_strcat(new_line, readline->cmd->tmp_line + readline->line_index);
+		if (new_line)
+			put_new_line(readline, new_line, is_line, len);
+	}
+}
+
+void		remove_from_line(t_readline *readline, int start, int end)
+{
+	char		*new_line;
+	char *const	line = readline->cmd->tmp_line;
+	int			is_line;
+	const int	len = end - start;
+
 	if (start >= 0)
 	{
 		is_line = !!ft_strnstr(&line[start], "\n", len);
 		line[start] = 0;
 		new_line = ft_strjoin(line, line + end);
 		if (new_line)
-		{
-			free(line);
-			readline->cmd->tmp_line = new_line;
-			readline->cmd->tmp_len -= len;
-			readline->line_index -= len;
-			readline->line_props.details[readline->line_props.index] -= len;
-			if (is_line == '\n')
-				readline->line_props.details = get_line_details(readline);
-			set_cursor_from_index(readline);
-		}
+			put_new_line(readline, new_line, is_line, -len);
 	}
-	rewrite_line(readline);
 }
 
-int *get_line_details(t_readline *readline)
+int			*get_line_details(t_readline *readline)
 {
-	int *ret;
-	char *tmp;
-	int line_count;
-	int i;
-	char *line;
+	int		*ret;
+	char	*tmp;
+	int		line_count;
+	int		i;
+	char	*line;
 
 	line = readline->cmd->tmp_line;
 	line_count = 1 + ft_str_occurence(line, '\n');
@@ -96,7 +94,7 @@ int *get_line_details(t_readline *readline)
 		ret[i++] = tmp - line;
 		line = tmp;
 		if (*tmp == '\0')
-			break;
+			break ;
 	}
 	return (ret);
 }
