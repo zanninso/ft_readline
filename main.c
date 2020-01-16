@@ -6,7 +6,7 @@
 /*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/07 00:57:15 by aait-ihi          #+#    #+#             */
-/*   Updated: 2020/01/16 01:20:06 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2020/01/16 23:35:57 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,33 +35,33 @@ char *remove_unprintable_chars(char *str)
 	return (ret);
 }
 
-int key_handel(t_readline *env, int b)
+int key_handel(t_readline *env, int b, int r)
 {
-	if (b == BUTTON_UP && !(b = 0))
+	if (b == BUTTON_UP && !(r = 0))
 		set_cur_history(env, env->cmd->next);
-	else if (b == BUTTON_DOWN && !(b = 0))
+	else if (b == BUTTON_DOWN && !(r = 0))
 		set_cur_history(env, env->cmd->prev);
-	else if (b == BUTTON_RIGHT && !(b = 0))
+	else if (b == BUTTON_RIGHT && !(r = 0))
 		cur_right(env);
-	else if (b == BUTTON_LEFT && !(b = 0))
+	else if (b == BUTTON_LEFT && !(r = 0))
 		cur_left(env);
-	else if (b == BUTTON_PUP && !(b = 0))
+	else if (b == BUTTON_PUP && !(r = 0))
 		cur_up(env);
-	else if (b == BUTTON_PDOWN && !(b = 0))
+	else if (b == BUTTON_PDOWN && !(r = 0))
 		cur_down(env);
-	else if ((b == BUTTON_HOME || b == BUTTON_END) && !(b = 0))
+	else if ((b == BUTTON_HOME || b == BUTTON_END) && !(r = 0))
 		to_start_or_end(env, b);
-	else if ((b == BUTTON_ALT_RIGHT || b == BUTTON_ALT_LEFT) && !(b = 0))
+	else if ((b == BUTTON_ALT_RIGHT || b == BUTTON_ALT_LEFT) && !(r = 0))
 		cur_move_by_word(env, b);
-	else if ((b == BUTTON_DEL || b == BUTTON_DEL2) && !(b = 0))
-		remove_from_line(env, env->line_index - 1, env->line_index);
-	else if (b == BUTTON_ENTER && !(b = 0))
+	else if ((b == BUTTON_DEL || b == BUTTON_DEL2) && !(r = 0))
+		remove_from_line(env, env->line_index - 1, env->line_index - 1);
+	else if (b == BUTTON_ENTER && !(r = 0))
 		end_readline(env, 1);
-	else if (b == BUTTON_SELECT && !(b = 0))
+	else if (b == BUTTON_SELECT && !(r = 0))
 		selection(env);
-	else if (b == BUTTON_PAST && !(b = 0))
+	else if (b == BUTTON_PAST && !(r = 0))
 		insert_in_line(env, remove_unprintable_chars(env->to_past));
-	return (b);
+	return (r);
 }
 
 void init(t_readline *readline)
@@ -141,7 +141,7 @@ int main()
 			// ft_putnbr_fd(((int *)buff)[0], fd);
 			// ft_putstr_fd("   ", fd);
 			button = *((int *)buff);
-			if (key_handel(&readline, button))
+			if (key_handel(&readline, button, 1))
 				insert_in_line(&readline, remove_unprintable_chars(buff));
 		}
 	}

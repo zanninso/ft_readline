@@ -6,7 +6,7 @@
 /*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/12 22:57:02 by aait-ihi          #+#    #+#             */
-/*   Updated: 2020/01/16 01:49:12 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2020/01/16 23:32:55 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ static void	put_new_line(t_readline *readline, char *new_line,
 	free(readline->cmd->tmp_line);
 	readline->cmd->tmp_line = new_line;
 	readline->cmd->tmp_len += len;
-	readline->line_index += len;
 	readline->line_props.details[readline->line_props.index] += len;
 	if (is_line)
 		readline->line_props.details = get_line_details(readline);
@@ -53,7 +52,10 @@ void		insert_in_line(t_readline *readline, char *str)
 		ft_strcat(new_line, str);
 		ft_strcat(new_line, readline->cmd->tmp_line + readline->line_index);
 		if (new_line)
+		{
+			readline->line_index += len;
 			put_new_line(readline, new_line, is_line, len);
+		}
 	}
 }
 
@@ -62,13 +64,14 @@ void		remove_from_line(t_readline *readline, int start, int end)
 	char		*new_line;
 	char *const	line = readline->cmd->tmp_line;
 	int			is_line;
-	const int	len = end - start;
+	const int	len = end - start + 1;
 
 	if (start >= 0)
 	{
 		is_line = !!ft_strnstr(&line[start], "\n", len);
 		line[start] = 0;
-		new_line = ft_strjoin(line, line + end);
+		new_line = ft_strjoin(line, line + end + 1);
+		readline->line_index = start;
 		if (new_line)
 			put_new_line(readline, new_line, is_line, -len);
 	}
@@ -78,23 +81,18 @@ int			*get_line_details(t_readline *readline)
 {
 	int		*ret;
 	char	*tmp;
-	int		line_count;
 	int		i;
 	char	*line;
-
-	line = readline->cmd->tmp_line;
-	line_count = 1 + ft_str_occurence(line, '\n');
-	if (!(ret = ft_memalloc(sizeof(int) * line_count)))
-		return (NULL);
+	
 	i = 0;
-	readline->line_props.linecount = line_count;
-	while ((tmp = (char *)ft_skip_unitl_char(line, "\n")))
-	{
-		*tmp == '\n' ? tmp++ : 0;
-		ret[i++] = tmp - line;
-		line = tmp;
-		if (*tmp == '\0')
-			break ;
-	}
+	line = readline->cmd->tmp_line;
+	readline->line_props.linecount =  1 + ft_str_occurence(line, '\n');
+	if ((ret = ft_memalloc(sizeof(int) * readline->line_props.linecount)))
+		while (i < readline->line_props.linecount)
+		{
+			tmp = (char *)ft_skip_unitl_char(line, "\n");
+			ret[i++] = (tmp - line) + (int)(*tmp == '\n');
+			line = tmp + 1;
+		}
 	return (ret);
 }
