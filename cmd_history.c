@@ -6,99 +6,99 @@
 /*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/14 08:55:45 by aait-ihi          #+#    #+#             */
-/*   Updated: 2020/01/16 23:13:08 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2020/01/16 23:40:15 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_readline.h"
 
-static	t_cmd_history *g_history_list = NULL;
+static	t_cmd_history *g_history_list = NULL;
 
 t_cmd_history	*get_cmd_history_head(void)
 {
-	return (g_history_list);
+	return (g_history_list);
 }
 
 void			add_to_history(char *str, int len)
 {
-	t_cmd_history	*tmp;
+	t_cmd_history	*tmp;
 
 	if (!str)
-		return ;
+		return ;
 	if ((tmp = ft_memalloc(sizeof(t_cmd_history))))
 	{
 		if (g_history_list)
-			g_history_list->prev = tmp;
-		tmp->next = g_history_list;
-		tmp->line = str;
-		tmp->tmp_line = ft_strdup(str);
-		tmp->len = len;
-		tmp->tmp_len = len;
-		g_history_list = tmp;
+			g_history_list->prev = tmp;
+		tmp->next = g_history_list;
+		tmp->line = str;
+		tmp->tmp_line = ft_strdup(str);
+		tmp->len = len;
+		tmp->tmp_len = len;
+		g_history_list = tmp;
 	}
 }
 
 void			free_history(void)
 {
-	t_cmd_history	*next;
+	t_cmd_history	*next;
 
 	while (g_history_list)
 	{
-		next = g_history_list->next;
+		next = g_history_list->next;
 		if (*g_history_list->line)
 		{
-			ft_bzero(g_history_list->line, g_history_list->len);
-			free(g_history_list->line);
+			ft_bzero(g_history_list->line, g_history_list->len);
+			free(g_history_list->line);
 		}
-		free(g_history_list);
-		g_history_list = next;
+		free(g_history_list);
+		g_history_list = next;
 	}
 }
 
 void			clean_hsitory(void)
 {
-	t_cmd_history	**next;
-	t_cmd_history	*to_free;
+	t_cmd_history	**next;
+	t_cmd_history	*to_free;
 
-	next = &g_history_list;
+	next = &g_history_list;
 	while (*next)
 	{
 		if (!(*next)->line || !*(*next)->line)
 		{
-			to_free = *next;
-			*next = (*next)->next;
-			free(to_free->line);
+			to_free = *next;
+			*next = (*next)->next;
+			free(to_free->line);
 			if (to_free->tmp_line != to_free->line)
-				free(to_free->tmp_line);
-			free(to_free);
-			continue;
+				free(to_free->tmp_line);
+			free(to_free);
+			continue;
 		}
 		else
-			break ;
-		next = &(*next)->next;
+			break ;
+		next = &(*next)->next;
 	}
 }
 
 void			set_cur_history(t_readline *readline, t_cmd_history *cur)
 {
-	char	*new_line;
+	char	*new_line;
 
 	if (!cur)
-		return ;
+		return ;
 	if (ft_strequ(readline->cmd->line, readline->cmd->tmp_line))
-		ft_strdel(&readline->cmd->tmp_line);
-	readline->cmd = cur;
-	new_line = cur->tmp_line;
+		ft_strdel(&readline->cmd->tmp_line);
+	readline->cmd = cur;
+	new_line = cur->tmp_line;
 	if (!cur->tmp_line && (new_line = ft_strdup(cur->line)))
 	{
-		cur->tmp_line = new_line;
-		cur->tmp_len = cur->len;
+		cur->tmp_line = new_line;
+		cur->tmp_len = cur->len;
 	}
-	readline->line_props.details = get_line_details(readline);
+	readline->line_props.details = get_line_details(readline);
 	if (new_line && readline->line_props.details)
 	{
-		readline->line_index = cur->tmp_len;
-		set_cursor_from_index(readline);
-		rewrite_line(readline);
+		readline->line_index = cur->tmp_len;
+		set_cursor_from_index(readline);
+		rewrite_line(readline);
 	}
 }
