@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   line_operation.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aait-ihi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/12 22:57:02 by aait-ihi          #+#    #+#             */
-/*   Updated: 2020/01/17 22:16:16 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2020/01/18 04:29:17 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ int			*get_line_details(t_readline *readline)
 	if ((ret = ft_memalloc(sizeof(int) * readline->line_props.linecount)))
 		while (i < readline->line_props.linecount)
 		{
-			tmp = (char *)ft_skip_unitl_char(line, "\n");
+			tmp = (char *)ft_skip_unitl_char(line, "\n", NULL);
 			ret[i++] = (tmp - line) + (int)(*tmp == '\n');
 			line = tmp + 1;
 		}

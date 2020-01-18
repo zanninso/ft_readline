@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cursor_helper.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aait-ihi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 14:44:38 by aait-ihi          #+#    #+#             */
-/*   Updated: 2020/01/18 00:54:00 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2020/01/18 04:28:48 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,9 +90,9 @@ void	get_cursor_position(t_readline *readline)
 		if (ft_strchr(buff, '['))
 			break ;
 	}
-	buff = (char *)ft_skip_unitl_char(buff, "[");
+	buff = ft_skip_unitl_char(buff, "[", NULL);
 	row = ft_atoi(buff + 1);
-	buff = (char *)ft_skip_unitl_char(buff, ";");
+	buff = ft_skip_unitl_char(buff, ";", NULL);
 	col = ft_atoi(buff + 1);
 	readline->o_cursor = (t_point){col - 1, row - 1};
 	readline->ov_cursor = readline->o_cursor;
