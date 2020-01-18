@@ -6,7 +6,7 @@
 /*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/07 00:57:15 by aait-ihi          #+#    #+#             */
-/*   Updated: 2020/01/16 23:35:57 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2020/01/18 01:02:22 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,15 +110,19 @@ void end_readline(t_readline *readline, int suit)
 int everything_is_ok(t_readline *readline)
 {
 	int ret;
+	const t_line line_props = readline->line_props;
 
 	ret = 1;
 	ret &= (readline->cmd && readline->cmd->tmp_line);
 	ret &= (readline->line_props.details != NULL);
 	if(ret)
 	{
-		readline->line_index %= readline->cmd->tmp_len + 1;
-		readline->line_props.index %= readline->line_props.linecount;
-		readline->cursor %= readline->line_props.details[readline->line_props.index] + 1;
+		if (!BETWEEN(readline->line_index, 0, readline->cmd->tmp_len))
+			readline->line_index = 0;
+		if (!BETWEEN(line_props.index, 0, line_props.linecount))
+			readline->line_props.index = 0;
+		if (!BETWEEN(readline->cursor, 0, line_props.details[line_props.index]))
+			readline->cursor = 0;
 	}
 	return(ret);
 }

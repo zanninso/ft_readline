@@ -6,7 +6,7 @@
 /*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 14:44:38 by aait-ihi          #+#    #+#             */
-/*   Updated: 2020/01/16 23:40:15 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2020/01/18 00:54:00 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ void	set_idnex_from_cursor(t_readline *readline)
 
 	i = readline->line_props.index;
 	index = readline->cursor;
+	if (!BETWEEN(index, 0, readline->line_props.details[i]))
+	index = 0;
 	while (i)
 	{
 		i--;

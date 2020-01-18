@@ -6,7 +6,7 @@
 /*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/12 22:57:02 by aait-ihi          #+#    #+#             */
-/*   Updated: 2020/01/17 01:24:18 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2020/01/17 22:16:16 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ int			*get_line_details(t_readline *readline)
 
 	i = 0;
 	line = readline->cmd->tmp_line;
-	ft_memdel((void **)readline->line_props.details);
+	ft_memdel((void **)&readline->line_props.details);
 	readline->line_props.linecount = 1 + ft_str_occurence(line, '\n');
 	if ((ret = ft_memalloc(sizeof(int) * readline->line_props.linecount)))
 		while (i < readline->line_props.linecount)
