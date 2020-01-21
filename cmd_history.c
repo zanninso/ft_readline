@@ -6,7 +6,7 @@
 /*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/14 08:55:45 by aait-ihi          #+#    #+#             */
-/*   Updated: 2020/01/16 23:40:15 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2020/01/18 23:36:23 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,25 +57,15 @@ void			free_history(void)
 
 void			clean_hsitory(void)
 {
-	t_cmd_history	**next;
-	t_cmd_history	*to_free;
+	t_cmd_history	*tmp;
 
-	next = &g_history_list;
-	while (*next)
+	if (g_history_list)
 	{
-		if (!(*next)->line || !*(*next)->line)
-		{
-			to_free = *next;
-			*next = (*next)->next;
-			free(to_free->line);
-			if (to_free->tmp_line != to_free->line)
-				free(to_free->tmp_line);
-			free(to_free);
-			continue;
-		}
-		else
-			break ;
-		next = &(*next)->next;
+		tmp = g_history_list->next;
+		free(g_history_list->line);
+		free(g_history_list->tmp_line);
+		free(g_history_list);
+		g_history_list = tmp;
 	}
 }
 

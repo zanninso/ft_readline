@@ -1,41 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   readline.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/07 00:57:15 by aait-ihi          #+#    #+#             */
-/*   Updated: 2020/01/18 01:02:22 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2020/01/20 12:39:51 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_readline.h"
 #include <readline/readline.h>
 
-char *remove_unprintable_chars(char *str)
-{
-	char *ret;
-	int i;
-
-	ret = str;
-	i = 0;
-	if (str)
-	{
-		while (*str)
-		{
-			if (ft_isprint(*str) || *str == '\n')
-			{
-				ret[i++] = *str;
-			}
-			str++;
-		}
-		ret[i] = 0;
-	}
-	return (ret);
-}
-
-int key_handel(t_readline *env, int b, int r)
+static int	key_handel(t_readline *env, int b, int r)
 {
 	if (b == BUTTON_UP && !(r = 0))
 		set_cur_history(env, env->cmd->next);
@@ -56,7 +34,7 @@ int key_handel(t_readline *env, int b, int r)
 	else if ((b == BUTTON_DEL || b == BUTTON_DEL2) && !(r = 0))
 		remove_from_line(env, env->line_index - 1, env->line_index - 1);
 	else if (b == BUTTON_ENTER && !(r = 0))
-		end_readline(env, 1);
+		ft_memdel((void **)&env->line_props.details);
 	else if (b == BUTTON_SELECT && !(r = 0))
 		selection(env);
 	else if (b == BUTTON_PAST && !(r = 0))
@@ -64,16 +42,12 @@ int key_handel(t_readline *env, int b, int r)
 	return (r);
 }
 
-void init(t_readline *readline)
+static void	readline_init(t_readline *readline, const char *prompt)
 {
 	g_readline = readline;
 	ft_bzero(readline, sizeof(t_readline));
-	if (tcgetattr(0, &readline->config) < 0)
-		puts("error");
-	readline->config.c_lflag &= ~(ECHO | ICANON);
-	if (tcsetattr(0, 0, &readline->config) < 0)
-		puts("error");
-	tgetent(NULL, getenv("TERM"));
+	readline->prompt = prompt;
+	configure_terminal(readline);
 	signal_resize(0);
 	get_cursor_position(readline);
 	add_to_history(ft_strdup(""), 0);
@@ -82,40 +56,33 @@ void init(t_readline *readline)
 	readline->line_props.details = ft_memalloc(sizeof(int));
 }
 
-
-void end_readline(t_readline *readline, int suit)
+static char	*end_readline(t_readline *readline)
 {
-	t_cmd_history *head;
-	char *tmp;
+	char	*tmp;
 
-	head = get_cmd_history_head();
-	if (suit && head->next)
+	tmp = NULL;
+	tputs(tgoto(tgetstr("cm", 0), 0, readline->o_cursor.y), 0, output);
+	if (readline->cmd && readline->cmd->tmp_line)
 	{
-		tmp = ft_strnjoin((char *[]){head->next->line, "\n", readline->cmd->tmp_line}, 3);
-		ft_strdel(&head->line);
-		free(readline->cmd->tmp_line);
-		readline->cmd->tmp_line = tmp;
-		readline->cmd->tmp_len = head->next->len + readline->cmd->tmp_len + 1;
-		head = head->next;
+		ft_printf("%s%s\n", readline->prompt, readline->cmd->tmp_line);
+		tmp = readline->cmd->tmp_line;
+		readline->cmd->tmp_line = NULL;
 	}
-	head->line = readline->cmd->tmp_line;
-	head->len = readline->cmd->tmp_len;
-	readline->cmd->tmp_line = NULL;
-	ft_strdel(&head->tmp_line);
+	free(readline->line_props.details);
 	clean_hsitory();
-	ft_printf("\n➜  ft_readline git:(master) ");
-	init(readline);
+	unconfigure_terminal(readline);
+	return (tmp);
 }
 
-int everything_is_ok(t_readline *readline)
+static int	everything_is_ok(t_readline *readline)
 {
-	int ret;
-	const t_line line_props = readline->line_props;
+	int				ret;
+	const t_line	line_props = readline->line_props;
 
 	ret = 1;
 	ret &= (readline->cmd && readline->cmd->tmp_line);
 	ret &= (readline->line_props.details != NULL);
-	if(ret)
+	if (ret)
 	{
 		if (!BETWEEN(readline->line_index, 0, readline->cmd->tmp_len))
 			readline->line_index = 0;
@@ -124,30 +91,33 @@ int everything_is_ok(t_readline *readline)
 		if (!BETWEEN(readline->cursor, 0, line_props.details[line_props.index]))
 			readline->cursor = 0;
 	}
-	return(ret);
+	return (ret);
 }
 
-int main()
+char		*ft_readline(const char *prompt)
 {
-	t_readline readline;
-	char buff[2049];
-	int r;
-	int button;
-	// int fd = open("/dev/ttys002", O_WRONLY);
+	t_readline	readline;
+	char		buff[2049];
+	int			button;
 
-	ft_printf("➜  ft_readline git:(master) ");
-	init(&readline);
-	while (everything_is_ok(&readline))
-	{
-		ft_bzero(buff, 2049);
-		if ((r = read(0, buff, 2048)) > 0)
+	prompt = prompt ? prompt : "";
+	ft_printf(prompt);
+	readline_init(&readline, prompt);
+	while (everything_is_ok(&readline) && ft_memset(buff, 0, 2049))
+		if (read(0, buff, 2048) > 0)
 		{
-			// ft_putnbr_fd(((int *)buff)[0], fd);
-			// ft_putstr_fd("   ", fd);
 			button = *((int *)buff);
 			if (key_handel(&readline, button, 1))
-				insert_in_line(&readline, remove_unprintable_chars(buff));
+			{
+				if (button == BUTTON_CTL_L)
+					clear_buffer(&readline);
+				else if (button == BUTTON_CTL_D && manage_ctlr_d(&readline))
+					return (ft_strdup(""));
+				else
+					insert_in_line(&readline, remove_unprintable_chars(buff));
+			}
 		}
-	}
-	// end_readline(&readline, 0);
+		else if (g_read_interrput)
+			return (manage_ctlr_c(&readline));
+	return (end_readline(&readline));
 }

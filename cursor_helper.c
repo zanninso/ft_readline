@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cursor_helper.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 14:44:38 by aait-ihi          #+#    #+#             */
-/*   Updated: 2020/01/18 04:28:48 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2020/01/20 12:06:12 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	set_idnex_from_cursor(t_readline *readline)
 	i = readline->line_props.index;
 	index = readline->cursor;
 	if (!BETWEEN(index, 0, readline->line_props.details[i]))
-	index = 0;
+		index = 0;
 	while (i)
 	{
 		i--;
@@ -75,25 +75,42 @@ void	set_cursor_from_index(t_readline *readline)
 	set_virtual_origin(readline);
 }
 
-void	get_cursor_position(t_readline *readline)
+void	to_start_or_end(t_readline *readline, int button)
 {
-	char	*buff;
-	int		col;
-	int		row;
+	const int	l = readline->line_props.details[readline->line_props.index];
+	const int	count = readline->line_props.linecount;
+	int			cursor;
 
-	buff = (char[21]){0};
-	while (1)
+	cursor = 0;
+	if (button == BUTTON_HOME)
 	{
-		ft_putstr_fd("\e[6n", 0);
-		col = read(0, buff, 20);
-		buff[col] = 0;
-		if (ft_strchr(buff, '['))
-			break ;
+		if (readline->cursor == 0 && readline->line_props.index > 0)
+		{
+			readline->line_props.index--;
+			set_virtual_origin(readline);
+		}
 	}
-	buff = ft_skip_unitl_char(buff, "[", NULL);
-	row = ft_atoi(buff + 1);
-	buff = ft_skip_unitl_char(buff, ";", NULL);
-	col = ft_atoi(buff + 1);
-	readline->o_cursor = (t_point){col - 1, row - 1};
-	readline->ov_cursor = readline->o_cursor;
+	else
+	{
+		if (readline->cursor == l - 1 && readline->line_props.index < count - 1)
+		{
+			readline->line_props.index++;
+			set_virtual_origin(readline);
+		}
+		cursor = readline->line_props.details[readline->line_props.index];
+		cursor -= readline->line_props.index != count - 1;
+	}
+	cur_goto(readline, cursor);
+}
+
+void	cur_goto(t_readline *readline, int cursor)
+{
+	t_point	origin;
+
+	origin = readline->ov_cursor;
+	origin.y += (origin.x + cursor) / readline->col;
+	origin.x = (origin.x + cursor) % readline->col;
+	readline->cursor = cursor;
+	set_idnex_from_cursor(readline);
+	tputs(tgoto(tgetstr("cm", 0), origin.x, origin.y), 0, output);
 }

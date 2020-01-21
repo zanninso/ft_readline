@@ -6,7 +6,7 @@
 /*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/07 13:19:03 by aait-ihi          #+#    #+#             */
-/*   Updated: 2020/01/16 23:40:15 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2020/01/20 12:41:56 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,4 @@ void	signal_resize(int sig)
 	ioctl(1, TIOCGWINSZ, &wn);
 	g_readline->col = wn.ws_col;
 	g_readline->row = wn.ws_row;
-}
-
-void	set_signal(void)
-{
-	int	sig;
-
-	sig = 0;
-	while (sig++ < 32)
-		signal(sig, SIG_IGN);
-	signal(SIGWINCH, signal_resize);
 }

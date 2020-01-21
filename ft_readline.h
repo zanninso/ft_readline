@@ -6,24 +6,21 @@
 /*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 12:55:33 by yabakhar          #+#    #+#             */
-/*   Updated: 2020/01/17 22:21:22 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2020/01/20 12:28:51 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_READLINE_H
 
 # define FT_READLINE_H
-# include <stdio.h>
-# include <curses.h>
 # include <term.h>
 # include <termios.h>
-# include <stdlib.h>
-# include <unistd.h>
 # include <sys/types.h>
 # include <fcntl.h>
 # include <sys/stat.h>
-# include "libft/includes/libft.h"
+# include "../libft/includes/libft.h"
 # include <sys/ioctl.h>
+
 # define BUTTON_ESC 27
 # define BUTTON_SELECT 40899
 # define BUTTON_COPY 42947
@@ -44,7 +41,11 @@
 # define BUTTON_END 4610843
 # define BUTTON_HOME 4741915
 # define BUTTON_R 114
-# define GET_LINE_INDEX(p, col) (t_point){p.x % col, p.y + (p.x / col);
+# define BUTTON_CTL_D 4
+# define BUTTON_CTL_L 12
+
+int g_read_interrput;
+
 typedef struct	s_point
 {
 	int x;
@@ -70,12 +71,14 @@ typedef struct s_line
 
 typedef struct s_readline
 {
-	struct termios config;
+	const char *prompt;
+	char *to_past;
 	t_cmd_history *cmd;
+	struct termios config;
 	t_line line_props;
 	t_point o_cursor;
 	t_point ov_cursor;
-	char *to_past;
+	
 	int cursor;
 	int line_index;
 	int col;
@@ -108,16 +111,19 @@ void update_o_cursor(t_readline *readline);
 /*
 **	Events
 */
-void end_readline(t_readline *readline, int suit);
 void history_previous(t_readline *readline);
 void history_next(t_readline *readline);
 
 /*
 **	Helpers
 */
-
-int output(int str);
+int manage_ctlr_d(t_readline *readline);
+char *manage_ctlr_c(t_readline *readline);
+void clear_buffer(t_readline *readline);
 void configure_terminal(t_readline *readline);
+void unconfigure_terminal(t_readline *readline);
+char		*remove_unprintable_chars(char *str);
+int output(int str);
 
 /*
 **	Line Operations
@@ -134,13 +140,11 @@ void clean_hsitory(void);
 void add_to_history(char *str, int len);
 void free_history(void);
 void set_cur_history(t_readline *readline, t_cmd_history *cur);
-// void move_in_history(t_readline *readline, int button);
 t_cmd_history *get_cmd_history_head(void);
 
 void set_signal(void);
 void signal_resize(int sig);
 void sig_dispatch(int a);
-
 void selection(t_readline *readline);
-
+char	*ft_readline(const char *prompt);
 #endif
