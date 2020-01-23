@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_history.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aait-ihi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/14 08:55:45 by aait-ihi          #+#    #+#             */
-/*   Updated: 2020/01/18 23:36:23 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2020/01/23 00:23:21 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ t_cmd_history	*get_cmd_history_head(void)
 	return (g_history_list);
 }
 
-void			add_to_history(char *str, int len)
+void			add_to_history(const char *str, int len)
 {
 	t_cmd_history	*tmp;
 
@@ -30,7 +30,7 @@ void			add_to_history(char *str, int len)
 		if (g_history_list)
 			g_history_list->prev = tmp;
 		tmp->next = g_history_list;
-		tmp->line = str;
+		tmp->line = ft_strdup(str);
 		tmp->tmp_line = ft_strdup(str);
 		tmp->len = len;
 		tmp->tmp_len = len;
@@ -78,14 +78,13 @@ void			set_cur_history(t_readline *readline, t_cmd_history *cur)
 	if (ft_strequ(readline->cmd->line, readline->cmd->tmp_line))
 		ft_strdel(&readline->cmd->tmp_line);
 	readline->cmd = cur;
-	new_line = cur->tmp_line;
 	if (!cur->tmp_line && (new_line = ft_strdup(cur->line)))
 	{
 		cur->tmp_line = new_line;
 		cur->tmp_len = cur->len;
 	}
 	readline->line_props.details = get_line_details(readline);
-	if (new_line && readline->line_props.details)
+	if (cur->tmp_line && readline->line_props.details)
 	{
 		readline->line_index = cur->tmp_len;
 		set_cursor_from_index(readline);
